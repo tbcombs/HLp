@@ -1,0 +1,15 @@
+name: "RnR"
+output_dir: "."
+navbar:
+  title: "RnR: Regression exercises in R"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Exercises"
+      href: exercises.html
+    - text: "About Me"
+      href: about.html
+output:
+  html_document:
+    theme: flatly
+    css: style.css
