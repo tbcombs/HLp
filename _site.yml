@@ -7,8 +7,6 @@ navbar:
       href: index.html
     - text: "Exercises"
       href: exercises.html
-    - text: "About Me"
-      href: about.html
 output:
   html_document:
     theme: flatly
