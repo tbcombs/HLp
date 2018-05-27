@@ -3,6 +3,4 @@ title: "Exercises"
 output: html_document
 ---
 
-## I will post 2-4 exercises over the summer of 2018.
-
 [Exercise 1: Bivariate regression](STLinequality.html)
