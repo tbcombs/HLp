@@ -1,3 +1,7 @@
 ---
 title: "RnR: Regression exercises in R"
 ---
+
+![](RnRlogo.png)
+
+Welcome to summer fun. I will post a few different exercises throughout the summer to provide some practice in R and a review of regression analysis.
