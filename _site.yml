@@ -14,7 +14,7 @@ navbar:
     - text: "Keys" 
       icon: fa-key
       href: keysub.html
-output:
+output: 
   html_document:
     theme: flatly
     css: style.css 
