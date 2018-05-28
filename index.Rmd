@@ -8,7 +8,7 @@ Welcome to summer fun!
 
 To help us prepare for PS 6403 (or purely for fun), I will post a few different exercises throughout the summer to provide some practice in R and a review of regression analysis.
 
-Please use the comments box for questions, and reply to others' comments if you can help. 
+Please use the comments box for questions, and reply to others' comments if you can help. Check the *email me replies* box to get notifications when someone answers. 
 
 <br>
 
