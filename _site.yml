@@ -1,7 +1,7 @@
 name: "RnR"
 output_dir: "."
 navbar:
-  title: '<div style=font-size: 200%;>RnR: Regression exercises in R</div>'
+  title: 'RnR: Regression exercises in R'
   left:
     - text: "Home"
       icon: fa-home

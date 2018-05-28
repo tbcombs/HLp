@@ -4,8 +4,14 @@ title: ""
 output: html_document
 ---
 <br><br><br><br>
-None yet... 
+None yet.
+
+Did you even try to do Exercise 1 before coming here to cheat?
+
+<br><br>
 
 ![](cryer.png)
+
+<br><br>
 
 Please try back later. 
