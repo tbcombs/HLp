@@ -10,7 +10,7 @@ To help us prepare for PS 6403 (or purely for fun), I will post a few different 
 
 Since this is not for class, I cannot commit to answering every question you may have or to inspect your code (not that this wasn't fun during the semester). 
 
-Accordingly, please use the comments box for questions, and help me out by replying to others' comments if you can help. Check the *email me replies* box to get notifications when someone answers. 
+Accordingly, please use the comments box for questions, and help me out by replying to others' comments if you can help. Check the *email me replies* box to get notifications when someone answers. I will check the comments intermittently as time allows.
 
 <br>
 
