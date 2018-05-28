@@ -8,7 +8,9 @@ Welcome to summer fun!
 
 To help us prepare for PS 6403 (or purely for fun), I will post a few different exercises throughout the summer to provide some practice in R and a review of regression analysis.
 
-Exercise 1 looks at inequality and income in STL neighborhoods and models the relationship with bivariate regression. Enjoy!
+Please use the comments box for questions, and reply to others' comments if you can help.
+
+Enjoy!
 
 
 <br><br><br>
