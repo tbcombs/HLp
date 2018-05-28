@@ -1,6 +1,7 @@
 ---
 title: "RnR: Regression exercises in R"
 author: "Todd Combs"
+output: html_document
 ---
 
 <img style= "float: right;" alt = "RnR logo" src="RnRlogo.png"/>
