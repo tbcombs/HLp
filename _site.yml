@@ -5,9 +5,13 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "Exercises"
-      href: exercises.html
+    - text: "Exercises" 
+      menu:
+      - text: "All"
+        href: exercises.html
+      - text: "Exercise 1"
+        href: STLinequality.html
 output:
   html_document:
     theme: flatly
-    css: style.css
+    css: style.css 
