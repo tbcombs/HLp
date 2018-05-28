@@ -7,7 +7,7 @@ output: html_document
 <img style= "float: right;" alt = "RnR logo" src="RnRlogo.png"/>
 
 
-<br><br><br><br><br><br>
+<br><br><br><br><br><br> 
 
 
 ### Welcome to summer fun!
