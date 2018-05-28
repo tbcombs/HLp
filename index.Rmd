@@ -7,9 +7,11 @@ author: "Todd Combs"
 
 
 <br><br><br><br><br><br>
-<br>
 
-Welcome to summer fun!
+
+### Welcome to summer fun!
+
+<br><br>
 
 To help us prepare for PS 6403 (or purely for fun), I will post a few different exercises throughout the summer to provide some practice in R and a review of regression analysis. Approximately two weeks after each exercise is posted, I will post an answer key. Remember that there are officially a thousand ways to do each thing in R, so if your results match mine and your code is clean and annotated everything should be good. 
 
