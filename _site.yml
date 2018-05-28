@@ -7,7 +7,7 @@ navbar:
       icon: fa-home
       href: index.html
     - text: "Exercises" 
-      icon: fa-r-project
+      icon: "fa-r-project"
       menu:
       - text: "Exercise 1"
         href: STLinequality.html
