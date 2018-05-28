@@ -11,7 +11,7 @@ navbar:
       menu:
       - text: "Exercise 1"
         href: STLinequality.html
-    - text: "Keys"
+    - text: "Keys" 
       icon: fa-key
       href: keySub.html
 output:
