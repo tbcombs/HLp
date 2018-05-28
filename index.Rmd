@@ -1,5 +1,6 @@
 ---
 title: "RnR: Regression exercises in R"
+author: "Todd Combs"
 ---
 
 ![](RnRlogo.png)
