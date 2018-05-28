@@ -2,7 +2,7 @@
 title: "RnR: Regression exercises in R"
 ---
 
-![](RnRlogo.png)
+![](RnRlogo.png) 
 
 Welcome to summer fun!
 
