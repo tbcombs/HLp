@@ -10,6 +10,14 @@ body{
       counter-reset:table figure;
   }
 
+h1 {
+  font-size: 36px;
+}
+
+h2 {
+  font-size: 28px;
+}
+
 .table{
   width:auto;
   font-size:26px;
