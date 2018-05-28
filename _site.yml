@@ -1,16 +1,19 @@
 name: "RnR"
 output_dir: "."
 navbar:
-  title: "RnR: Regression exercises in R"
+  title: '<div style=font-size: 200%;>RnR: Regression exercises in R</div>'
   left:
     - text: "Home"
+      icon: fa-home
       href: index.html
     - text: "Exercises" 
+      icon: fa-child
       menu:
-      - text: "All"
-        href: exercises.html
       - text: "Exercise 1"
         href: STLinequality.html
+    - text: "Keys"
+      icon: fa-key
+      href: keySub.html
 output:
   html_document:
     theme: flatly

@@ -4,3 +4,42 @@
 h1, h2, h3, h4, h5, body {
 font-family: 'Open Sans Condensed', sans-serif;
 }
+
+body{ 
+      font-size: 16pt;
+      counter-reset:table figure;
+  }
+
+.table{
+  width:auto;
+  font-size:26px;
+}
+
+caption::before{
+  counter-increment: table;
+  content: "Table " counter(table) ": ";
+}
+
+.caption::before{
+  counter-increment: figure;
+  content: "Figure " counter(figure) ": ";
+}
+
+caption, .caption{
+  font-style:italic;
+  font-size: 16px;
+  margin-top:0.5em;
+  margin-bottom:0.5em;
+  width:80%;
+  text-align: left;
+}
+
+#TOC {
+  font-size: 17px;
+  width: 100%;
+}
+
+
+.navbar-title{
+  font-size: 26px;
+}
