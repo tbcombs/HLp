@@ -15,7 +15,7 @@ navbar:
       icon: fa-key
       menu:
       - text: "Exercise 1"
-      - href: STLinequality_key.html
+        href: STLinequality_key.html
 output: 
   html_document:
     theme: flatly
