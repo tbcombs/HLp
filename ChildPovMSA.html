@@ -11,7 +11,7 @@
 
 
 
-<title>RegressionInR: Exercise 1 Bivariate model</title>
+<title>RegressionInR: Exercise 2 Multivariate model with interaction term</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -234,7 +234,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">RegressionInR: Exercise 1 Bivariate model</h1>
+<h1 class="title toc-ignore">RegressionInR: Exercise 2 Multivariate model with interaction term</h1>
 
 </div>
 
@@ -291,42 +291,45 @@ caption, .caption{
 <p>24 June, 2018</p>
 <p><br> <br> <br> <br></p>
 </div>
-<div id="inequality-income-in-st.louis-neighborhoods" class="section level1">
-<h1>Inequality &amp; income in St. Louis neighborhoods</h1>
+<div id="child-poverty-in-us-metropolitan-statistical-areas" class="section level1">
+<h1>Child poverty in US Metropolitan Statistical Areas</h1>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p><font size="5"> You are interested in economic inequality in St. Louis neighborhoods. You posit that wealthier neighborhoods are more unequal than poorer ones. Here you will investigate the relationship between income inequality and income in St. Louis.</p>
+<p><font size="5"> You work for a non-profit that is partnering with the government to combat child poverty in urban areas. You are tasked with identifying metropolitan statistical areas (MSAs) that are most at risk for high rates of child poverty. You decide to perform an OLS regression to determine the characteristics of large urban areas that are most correlated with child poverty.</p>
+<p>You have a dataset containing a sample of 300 MSAs. Read the data into R from this url: <a href="https://raw.githubusercontent.com/tbcombs/RnR/master/MSA2016.csv" class="uri">https://raw.githubusercontent.com/tbcombs/RnR/master/MSA2016.csv</a>. You will also find variable definitions online here: <a href="https://raw.githubusercontent.com/tbcombs/RnR/master/MSA2016_dataDefs.txt" class="uri">https://raw.githubusercontent.com/tbcombs/RnR/master/MSA2016_dataDefs.txt</a>.</p>
+<p>You hypothesize that unemployment, income, and inequality are driving factors of child poverty, or that at least that each is highly correlated with child poverty. You also want to test for a relationship between child poverty and racial diversity in MSAs, and to control for average household size, since as household size increases, it is logical to believe that there are more children. Finally, you suspect that large MSAs - those with one million or more people, are qualitatively different from smaller metro areas, and in addition, you believe that large MSAs that are relatively wealthy might be more likely to have social safety net programs in place and therefore lower rates of child poverty. You will model this relationship by including an interaction term in the model between income and the dichotomous variable for large MSAs.</p>
 </div>
-<div id="step-1-download-data" class="section level2">
-<h2>Step 1: Download data</h2>
-<p>Go to Social Explorer and download two variables at the census tract level for St. Louis City and St. Louis County: the Gini index of inequality, <code>SE_T057_001</code>, and median household income, <code>SE_T157_001</code>. Use the 2016 five-year estimates from the American Community Survey.</p>
-<p>Formally state your hypothesis.</p>
+<div id="step-1-read-in-data-formulate-hypotheses" class="section level2">
+<h2>Step 1: Read in data &amp; formulate hypotheses</h2>
+<p>Read in the data, review the data definitions, and formally state your hypothesis.</p>
 <p>Read the data into R. Load only the libraries that you need.</p>
 </div>
-<div id="step-2-data-management" class="section level2">
-<h2>Step 2: Data management</h2>
-<p>Keep only the variables for tract FIPS code, Tract name, County, Gini index, and median household income. Rename variables with descriptive names and recode income into units of $10,000s.</p>
+<div id="step-2-visualization-of-variables-and-relationships." class="section level2">
+<h2>Step 2: Visualization of variables and relationships.</h2>
+<p>Create appropriate plots to 1) visualize the distribution of the dependent variable, 2) visualize each of the independent variables with the dependent variable, and 3) visualize the interaction between MSA size and income and its relationship with child poverty. Interpret the plots. Are the distributions approximately normal? What is the relationship? Is it linear? What else can you say about each plot?</p>
 </div>
-<div id="step-3-visualize-data" class="section level2">
-<h2>Step 3: Visualize data</h2>
-<p>Create visualizations of each of the two variables separately, then plot the two together to visualize the relationship. Interpret the plots. Are the distributions approximately normal? What is the relationship? Is it linear? What else can you say about each plot?</p>
-</div>
-<div id="step-4-bivariate-ols-model" class="section level2">
-<h2>Step 4: Bivariate OLS model</h2>
-<p>Model inequality (Y) on income (X). First run a level-level model. Second, try a model with the natural log of income. Finally, try a model with a quadratic form of income. Discuss the GOF for each model and the statistical significance of the coefficient(s). Which model is best?</p>
+<div id="step-3-multivariate-ols-model" class="section level2">
+<h2>Step 3: Multivariate OLS model</h2>
+<p>Model child poverty (Y) on the predictors, including the interaction. Do not forget to include the categorical variable as a factor. Discuss the GOF for the model. How is the fit?</p>
 </div>
 <div id="step-5-model-diagnostics" class="section level2">
 <h2>Step 5: Model diagnostics</h2>
-<p>Check the model for heteroskedasticity visually and with a test statistic. Interpret the plot. Should you reject or fail to reject the null hypothesis of the Breush Pagan test? Wait, what is the null hypothesis? HINT: you may want to ask for the standard errors of the predictions to save time later, on Step 7.</p>
-<p>If you decided on the level-level or level-log model, check for linearity of income (or the log of income) with the model predictions. Do this with a plot. Interpret the plot. If you chose the quadratic model, plot the quadratic relationship. Hint: Google ggplot geom_smooth quadratic to find the code/formula to do this. Interpret the plot.</p>
+<p>Check the model for multicollinearity. Remember that the interaction term directly builds in multicollinearity, since two variables are represented twice. Are there other concerns about multicollinearity?</p>
+<p>Check the model for heteroskedasticity visually and with a test statistic. Interpret the plot. Should you reject or fail to reject the null hypothesis of the Breush Pagan test?</p>
+<p>Check that the continous predictors are linear with the model predictions through visualization. Do the relationships seem sufficiently linear?</p>
+<p>Check for influential observations. If necessary, re-run the model without potential offending observations and compare coefficient estimates. Should you keep the whole sample or discard some influential observations?</p>
 </div>
 <div id="step-6-model-results" class="section level2">
 <h2>Step 6: Model results</h2>
-<p>Present the model results in a table or graph. Interpret everything you should interpret. Should you accept your alternative hypothesis or reject it?</p>
+<p>Present the model results in a table or graph and confirm whether you have retained the entire sample. Interpret everything you should interpret. Should you accept your alternative hypotheses or reject them?</p>
 </div>
 <div id="step-7-visualize-predictions" class="section level2">
 <h2>Step 7: Visualize predictions</h2>
-<p>Using points and error bars to plot median household income (in $10,000s) by the predicted values of the Gini index for St. Louis neighborhoods. Interpret the plot. Where are you most confident in the predictions? Least confident? What does this say about inequality and income in St. Louis?</p>
+<p>Create some graphs to visualize the predicted rates of child poverty across representative values (or the ranges) of the predictors. Create at least one graph depicting how the interaction affects predictions. Also, two coefficients are directly comparable. Which are they, and how do they compare substantively?</p>
+</div>
+<div id="step-8-discussion" class="section level2">
+<h2>Step 8: Discussion</h2>
+<p>What are your recommendations for choosing MSAs in which to implement the anti-child poverty program? Which characteristics do you think are most important?</p>
 </div>
 </div>
 

@@ -11,6 +11,8 @@ navbar:
       menu:
       - text: "Exercise 1"
         href: STLinequality.html
+      - text: "Exercise 2"
+        href: ChildPovMSA.html
     - text: "Keys" 
       icon: fa-key
       menu:

@@ -1,0 +1,19 @@
+
+
+MSA2016 data definitions
+
+NAME: Name of MSA
+
+chPov_pc: Children living at or below poverty level (%)
+
+hhsz: Average household size (# of people)
+
+gini: Gini index of income inequality (higher = more inequality)
+
+mhhi10k: Median household income (in $10,000s)
+
+big: 0 = < 1 million people; 1 = 1 million or more people in MSA
+
+unemp_pc: Unemployment rate (% of labor force)
+
+rd: Index of racial & ethnic diversity; the probability that two people chosen at random will be from different races or ethnicities
