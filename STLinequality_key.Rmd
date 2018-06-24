@@ -1,0 +1,366 @@
+---
+title: "RegressionInR: Exercise 1 Bivariate model"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+[//]: # CSS style arguments
+
+<style type="text/css">
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300i,700');
+
+h1, h2, h3, h4, h5, body {
+font-family: 'Open Sans Condensed', sans-serif;
+}
+
+body{ 
+      font-size: 16pt;
+      counter-reset:table figure;
+  }
+
+.table{
+  width:auto;
+  font-size:26px;
+}
+
+caption::before{
+  counter-increment: table;
+  content: "Table " counter(table) ": ";
+}
+
+.caption::before{
+  counter-increment: figure;
+  content: "Figure " counter(figure) ": ";
+}
+
+caption, .caption{
+  font-style:italic;
+  font-size: 16px;
+  margin-top:0.5em;
+  margin-bottom:0.5em;
+  width:80%;
+  text-align: left;
+}
+
+#TOC {
+  font-size: 17px;
+  width: 100%;
+}
+
+
+
+</style>
+
+```{r knitOpts, include=F}
+knitr::opts_chunk$set(fig.width=12, fig.height=8, 
+                      warning=FALSE, message=FALSE, 
+                      cache=TRUE)
+
+```
+
+```{r prolog, results='hide', include=F}
+
+
+'# PROLOG   #################################################'   
+
+'# PROJECT: REGRESSION IN R EXERCISES #'   
+'# PURPOSE: BIVARIATE REGRESSION #'   
+'# DIR:     Dropbox/R/RegressionInR #'   
+'# DATA:    R11705472_SL320.csv #'   
+'# AUTHOR:  Todd COMBS #'   
+'# CREATED: MAY 18, 2018 #'   
+'# LATEST:  JUN 23, 2018 #'   
+'# NOTES:   Bivariate regression of gini index on income #'   
+'#          in STL City/County tracts 2016. #'
+'#          Data from ACS 5-yr 2012-16 Social Explorer #'
+'# PROLOG   ################################################'  
+
+```
+
+<img src="RnRlogo.png" alt="Regression in R logo" style="float: right;">
+
+<br>
+<br>
+<br>
+<br>
+
+
+## Todd Combs
+
+`r format(Sys.time(), '%d %B, %Y')`
+
+<br>
+<br>
+<br>
+<br>
+
+# Inequality & income in St. Louis neighborhoods
+
+## Introduction
+
+<font size="5">
+You are interested in economic inequality in St. Louis neighborhoods. You posit that wealthier neighborhoods are more unequal than poorer ones. Here you will investigate the relationship between income inequality and income in St. Louis. 
+
+## Step 1: Download data
+
+Go to Social Explorer and download two variables at the census tract level for St. Louis City and St. Louis County: the Gini index of inequality, `SE_T057_001`, and median household income, `SE_T157_001`. Use the 2016 five-year estimates from the American Community Survey. 
+
+Formally state your hypothesis.
+
+Read the data into R. Load only the libraries that you need.
+
+
+
+
+```{r libsData}
+
+#libraries
+library(tidyverse)
+library(magrittr)
+library(lmtest)
+library(stargazer)
+
+#graph theme
+theme_set(theme_minimal())
+
+
+#data
+r <- read_csv("R11712137_SL140.csv")
+
+
+```
+
+## Step 2: Data management
+
+Keep only the variables for tract FIPS code, Tract name, County, Gini index, and median household income. Rename variables with descriptive names and recode income into units of $10,000s.
+
+```{r dataManip}
+
+#keep only needed vars
+r <- r %>%
+  select(Geo_FIPS,Geo_TRACT,Geo_COUNTY,SE_T057_001,SE_T157_001)
+
+#rename vars & recode income into 10,000s
+r <- r %>%
+  mutate(mhhi10k = SE_T057_001/10000) %>%
+  rename(gini = SE_T157_001)
+
+
+
+```
+
+## Step 3: Visualize data
+
+Create visualizations of each of the two variables separately, then plot the two together to visualize the relationship. Interpret the plots. Are the distributions approximately normal? What is the relationship? Is it linear? What else can you say about each plot?
+
+```{r vizVars, fig.cap="Distributions of Gini index and median household income, St. Louis City & County census tracts, 2016"}
+
+r2 <- r %>%
+  select(gini,mhhi10k) %>%
+  rename(`Gini index of inequality` = gini,
+         `Median household income ($10,000s)` = mhhi10k) %>%
+  gather(key,val)
+
+h <- r2 %>%
+  ggplot(aes(val))
+
+h <- h + geom_histogram() + facet_wrap(~key, scales="free_x") 
+
+h <- h + labs(x="",y="Number of census tracts")
+
+h + theme_minimal()
+
+```
+
+The gini index of inequality seems approximately normally distributed and ranges from about 0.3 to 0.6. Median household income (hereafter, income) is skewed right, meaning that there are a handful of high observations in the right tail, or some wealthier neighborhoods in St. Louis where income is above $150,000.
+<br>
+
+```{r vizRelation, fig.cap="Gini index and income, St. Louis City & County census tracts, 2016"}
+
+
+
+
+#visualize relationship
+g <- r %>%
+  ggplot(aes(x=mhhi10k,y=gini))
+
+g <- g + geom_point() + geom_smooth()
+
+g <- g + labs(x="Median household income ($10,000s)",
+              y = "Gini index of inequality")
+
+g + theme_minimal()
+
+```
+
+The scatterplot of inequality and income reveals that the relationship is likely nonlinear. It may be a level-log relationship with diminishing impacts as income goes above a certain threshold, or a quadratic relationship that peaks at the extremes.
+<br>
+
+## Step 4: Bivariate OLS model
+
+Model inequality (Y) on income (X). First run a level-level model. Second, try a model with the natural log of income. Finally, try a model with a quadratic form of income. Discuss the GOF for each model and the statistical significance of the coefficient(s). Which model is best?
+
+```{r mods}
+
+#model level-level
+m1 <- lm(gini~mhhi10k,r)
+
+#model level-log
+m2 <- lm(gini~log(SE_T057_001),r)
+
+#model level-quadratic
+m3 <- lm(gini~mhhi10k + I(mhhi10k^2),r)
+
+```
+
+<br>
+
+The R-squared measures from the models are as follows:
+
+- Linear: 0.04
+- Level-log: 0.09
+- Quadratic: 0.12 (Adj.)
+
+Also, the coefficients from the quadratic model have the lowest p-values across all models, so these are most statistically significant. The most appropriate model is the quadratic.
+
+<br>
+
+## Step 5: Model diagnostics
+
+Check the model for heteroskedasticity visually and with a test statistic. Interpret the plot. Should you reject or fail to reject the null hypothesis of the Breush Pagan test? Wait, what is the null hypothesis? HINT: you may want to ask for the standard errors of the predictions to save time later, on Step 7.
+
+```{r diags1, fig.cap="Residuals vs. fitted plot"}
+
+# check for heteroskedasticity
+bptest(m3)
+
+# get residuals and fitted values with SEs
+r <- r %>%
+  mutate(res = as.numeric(resid(m3)),
+         fit = as.numeric(predict(m3)),
+         seFit = as.numeric(predict(m3,se=T)[[2]]))
+
+# residuals vs fitted plot
+rvf <- r %>%
+  ggplot(aes(x=fit,y=res))
+
+rvf <- rvf + geom_point() +
+  geom_hline(yintercept = 0,color="red",linetype=2)
+
+rvf <- rvf + labs(x="Fitted values",
+                  y="Residuals")
+rvf + theme_minimal()
+```
+
+<br>
+
+The Breusch-Pagan test statistic is not statistically significant (at p = 0.73), indicating constant variance of the errors. Heteroskedasticity is not present. This is also apparent from the residuals v. fitted plot where the errors seem to be randomly distributed.
+
+<br>
+<br>
+
+If you decided on the level-level or level-log model, check for linearity of income (or the log of income) with the model predictions. Do this with a plot. Interpret the plot. If you chose the quadratic model, plot the quadratic relationship. Hint: Google ggplot geom_smooth quadratic to find the code/formula to do this. Interpret the plot.
+
+```{r diags2, fig.cap="Check for linearity of predictions"}
+# check for linearity
+lc <- r %>%
+  ggplot(aes(x=mhhi10k,y=fit))
+
+# wait, it is not a linear model but a quadratic one!
+lc <- lc + geom_point() + geom_smooth(method="lm",
+                                      formula = y ~ x + I(x^2))
+lc <- lc + labs(x="Median household income ($10,000s)",
+                y="Predicted Gini index")
+
+lc + theme_minimal()
+
+```
+
+<br>
+
+The relationship between X (income) and Y (quadratic fit) follows the expected U-shaped pattern.
+
+<br>
+
+## Step 6: Model results
+
+Present the model results in a table or graph. Interpret everything you should interpret. Should you accept your alternative hypothesis or reject it?
+<br>
+
+```{r modResults, results='asis'}
+
+stargazer(m3, type='html')
+
+```
+<br>
+<br>
+
+To calculate & interpret coefficients for quadratics, we use the following formula, where \(\widehat{\beta_1}\) is the coefficient on the level value of \(X\), and \(\widehat{\beta_2}\) is the coefficient on the squared value of \(X\).
+
+$$ \widehat{\beta_1} + 2\widehat{\beta_2}X $$
+
+
+```{r coefsPlot, fig.cap="Estimated coefficient values for representative values (10th, 50th, 90th percentiles) of income"}
+
+myx <- r %$% quantile(mhhi10k, probs=c(0.1, 0.5, 0.9))
+myxci <- confint(m3)[2:3,]
+myxco <- coef(m3)
+
+mycoefs <- tibble(lb=rep(NA,3), est=NA, ub=NA, xs = myx)
+##FIX!!
+for (i in 1:3) {
+  mycoefs$lb[i] <- myxci[1,1] + 2*myxci[2,1]*mycoefs$xs[i]
+    mycoefs$ub[i] <- myxci[1,2] + 2*myxci[2,2]*mycoefs$xs[i]
+    mycoefs$est[i] <- myxco[2] + 2*myxco[3]*mycoefs$xs[i]
+
+}
+
+mycoefs <- mycoefs %>%
+  mutate(y=1:3) %>%
+  mutate(mylabs = c("Median income: $23k",
+                    "Median income: $52k",
+                    "Median income: $100k"))
+
+g <- mycoefs %>%
+  ggplot(aes(x=est,xmin=lb,xmax=ub, y=y))
+
+g <- g + geom_errorbarh(height=0.25) + geom_point()
+
+g <- g + geom_vline(xintercept=0,color="red",linetype=2)
+
+g <- g + labs(x="Estimated coefficient with 95% confidence intervals",y="") +
+  scale_y_continuous(breaks=1:3,labels= mycoefs %$% mylabs)
+
+g + theme_minimal()
+
+```
+<br>
+
+The coefficient, or predicted change in inequality for a \$10,000 increase in median household income, is statistically significant only when income is low. This means that if two otherwise alike neighborhoods with median incomes of \$23,000 & \$33,000, we would predict that the gini index would be about 0.02 less in the neighborhood with \$33,000 median income. At some threshold before the median median household income of \$52,000, income ceases to influence inequality, since the estimate at this income is statistically insignificant.
+
+<br>
+
+## Step 7: Visualize predictions
+
+Using points and error bars to plot median household income (in $10,000s) by the predicted values of the Gini index for St. Louis neighborhoods. Interpret the plot. Where are you most confident in the predictions? Least confident? What does this say about inequality and income in St. Louis?
+
+```{r preds, fig.cap="Inequality in St. Louis neighborhoods as predicted by income"}
+
+# plot predictions
+mypr <- r %>%
+  ggplot(aes(x=mhhi10k,y=fit,ymin=fit-1.96*seFit,
+             ymax=fit+1.96*seFit))
+
+mypr <- mypr + geom_errorbar() + geom_point()
+
+mypr <- mypr + labs(x="Median household income ($10,000s)",
+                    y="Predicted Gini index with 95% confidence intervals")
+
+mypr + theme_minimal()
+
+
+
+```
+
+Our model predicts that inequality is highest in St. Louis neighborhoods that are relatively poor, or relatively wealthy, and lowest in neighborhoods that have median household incomes of around \$100,000. We are least confident in our predictions for wealthier neighborhoods, as can be seen with the wider confidence intervals, and most confident in our predictions when median income is around \$50,000. Though we hypothesized that inequality would be higher as income increased, we see that inequality is highest when income is at its lowest or highest, suggesting that St. Louis neighborhoods that are about average in terms of income are the most equal in terms of the distribution of income.

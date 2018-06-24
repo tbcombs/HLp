@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>RegressionInR: Exercise 1 Bivariate model</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">RnR: Regression exercises in R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-child"></span>
+     
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="STLinequality.html">Exercise 1</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="keysub.html">
+    <span class="fa fa-key"></span>
+     
+    Keys
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">RegressionInR: Exercise 1 Bivariate model</h1>
+
+</div>
+
+
+<style type="text/css">
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300i,700');
+
+h1, h2, h3, h4, h5, body {
+font-family: 'Open Sans Condensed', sans-serif;
+}
+
+body{ 
+      font-size: 16pt;
+      counter-reset:table figure;
+  }
+
+.table{
+  width:auto;
+  font-size:26px;
+}
+
+caption::before{
+  counter-increment: table;
+  content: "Table " counter(table) ": ";
+}
+
+.caption::before{
+  counter-increment: figure;
+  content: "Figure " counter(figure) ": ";
+}
+
+caption, .caption{
+  font-style:italic;
+  font-size: 16px;
+  margin-top:0.5em;
+  margin-bottom:0.5em;
+  width:80%;
+  text-align: left;
+}
+
+#TOC {
+  font-size: 17px;
+  width: 100%;
+}
+
+
+
+</style>
+<p><img src="RnRlogo.png" alt="Regression in R logo" style="float: right;"></p>
+<p><br> <br> <br> <br></p>
+<div id="todd-combs" class="section level2">
+<h2>Todd Combs</h2>
+<p>23 June, 2018</p>
+<p><br> <br> <br> <br></p>
+</div>
+<div id="inequality-income-in-st.louis-neighborhoods" class="section level1">
+<h1>Inequality &amp; income in St. Louis neighborhoods</h1>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p><font size="5"> You are interested in economic inequality in St. Louis neighborhoods. You posit that wealthier neighborhoods are more unequal than poorer ones. Here you will investigate the relationship between income inequality and income in St. Louis.</p>
+</div>
+<div id="step-1-download-data" class="section level2">
+<h2>Step 1: Download data</h2>
+<p>Go to Social Explorer and download two variables at the census tract level for St. Louis City and St. Louis County: the Gini index of inequality, <code>SE_T057_001</code>, and median household income, <code>SE_T157_001</code>. Use the 2016 five-year estimates from the American Community Survey.</p>
+<p>Formally state your hypothesis.</p>
+<p>Read the data into R. Load only the libraries that you need.</p>
+<pre class="r"><code>#libraries
+library(tidyverse)
+library(magrittr)
+library(lmtest)
+library(stargazer)
+
+#graph theme
+theme_set(theme_minimal())
+
+
+#data
+r &lt;- read_csv(&quot;R11712137_SL140.csv&quot;)</code></pre>
+</div>
+<div id="step-2-data-management" class="section level2">
+<h2>Step 2: Data management</h2>
+<p>Keep only the variables for tract FIPS code, Tract name, County, Gini index, and median household income. Rename variables with descriptive names and recode income into units of $10,000s.</p>
+<pre class="r"><code>#keep only needed vars
+r &lt;- r %&gt;%
+  select(Geo_FIPS,Geo_TRACT,Geo_COUNTY,SE_T057_001,SE_T157_001)
+
+#rename vars &amp; recode income into 10,000s
+r &lt;- r %&gt;%
+  mutate(mhhi10k = SE_T057_001/10000) %&gt;%
+  rename(gini = SE_T157_001)</code></pre>
+</div>
+<div id="step-3-visualize-data" class="section level2">
+<h2>Step 3: Visualize data</h2>
+<p>Create visualizations of each of the two variables separately, then plot the two together to visualize the relationship. Interpret the plots. Are the distributions approximately normal? What is the relationship? Is it linear? What else can you say about each plot?</p>
+<pre class="r"><code>r2 &lt;- r %&gt;%
+  select(gini,mhhi10k) %&gt;%
+  rename(`Gini index of inequality` = gini,
+         `Median household income ($10,000s)` = mhhi10k) %&gt;%
+  gather(key,val)
+
+h &lt;- r2 %&gt;%
+  ggplot(aes(val))
+
+h &lt;- h + geom_histogram() + facet_wrap(~key, scales=&quot;free_x&quot;) 
+
+h &lt;- h + labs(x=&quot;&quot;,y=&quot;Number of census tracts&quot;)
+
+h + theme_minimal()</code></pre>
+<div class="figure">
+<img src="STLinequality_key_files/figure-html/vizVars-1.png" alt="Distributions of Gini index and median household income, St. Louis City &amp; County census tracts, 2016" width="1152" />
+<p class="caption">
+Distributions of Gini index and median household income, St. Louis City &amp; County census tracts, 2016
+</p>
+</div>
+<p>The gini index of inequality seems approximately normally distributed and ranges from about 0.3 to 0.6. Median household income (hereafter, income) is skewed right, meaning that there are a handful of high observations in the right tail, or some wealthier neighborhoods in St. Louis where income is above $150,000. <br></p>
+<pre class="r"><code>#visualize relationship
+g &lt;- r %&gt;%
+  ggplot(aes(x=mhhi10k,y=gini))
+
+g &lt;- g + geom_point() + geom_smooth()
+
+g &lt;- g + labs(x=&quot;Median household income ($10,000s)&quot;,
+              y = &quot;Gini index of inequality&quot;)
+
+g + theme_minimal()</code></pre>
+<div class="figure">
+<img src="STLinequality_key_files/figure-html/vizRelation-1.png" alt="Gini index and income, St. Louis City &amp; County census tracts, 2016" width="1152" />
+<p class="caption">
+Gini index and income, St. Louis City &amp; County census tracts, 2016
+</p>
+</div>
+<p>The scatterplot of inequality and income reveals that the relationship is likely nonlinear. It may be a level-log relationship with diminishing impacts as income goes above a certain threshold, or a quadratic relationship that peaks at the extremes. <br></p>
+</div>
+<div id="step-4-bivariate-ols-model" class="section level2">
+<h2>Step 4: Bivariate OLS model</h2>
+<p>Model inequality (Y) on income (X). First run a level-level model. Second, try a model with the natural log of income. Finally, try a model with a quadratic form of income. Discuss the GOF for each model and the statistical significance of the coefficient(s). Which model is best?</p>
+<pre class="r"><code>#model level-level
+m1 &lt;- lm(gini~mhhi10k,r)
+
+#model level-log
+m2 &lt;- lm(gini~log(SE_T057_001),r)
+
+#model level-quadratic
+m3 &lt;- lm(gini~mhhi10k + I(mhhi10k^2),r)</code></pre>
+<p><br></p>
+<p>The R-squared measures from the models are as follows:</p>
+<ul>
+<li>Linear: 0.04</li>
+<li>Level-log: 0.09</li>
+<li>Quadratic: 0.12 (Adj.)</li>
+</ul>
+<p>Also, the coefficients from the quadratic model have the lowest p-values across all models, so these are most statistically significant. The most appropriate model is the quadratic.</p>
+<p><br></p>
+</div>
+<div id="step-5-model-diagnostics" class="section level2">
+<h2>Step 5: Model diagnostics</h2>
+<p>Check the model for heteroskedasticity visually and with a test statistic. Interpret the plot. Should you reject or fail to reject the null hypothesis of the Breush Pagan test? Wait, what is the null hypothesis? HINT: you may want to ask for the standard errors of the predictions to save time later, on Step 7.</p>
+<pre class="r"><code># check for heteroskedasticity
+bptest(m3)</code></pre>
+<pre><code>## 
+##  studentized Breusch-Pagan test
+## 
+## data:  m3
+## BP = 0.6749, df = 2, p-value = 0.7136</code></pre>
+<pre class="r"><code># get residuals and fitted values with SEs
+r &lt;- r %&gt;%
+  mutate(res = as.numeric(resid(m3)),
+         fit = as.numeric(predict(m3)),
+         seFit = as.numeric(predict(m3,se=T)[[2]]))
+
+# residuals vs fitted plot
+rvf &lt;- r %&gt;%
+  ggplot(aes(x=fit,y=res))
+
+rvf &lt;- rvf + geom_point() +
+  geom_hline(yintercept = 0,color=&quot;red&quot;,linetype=2)
+
+rvf &lt;- rvf + labs(x=&quot;Fitted values&quot;,
+                  y=&quot;Residuals&quot;)
+rvf + theme_minimal()</code></pre>
+<div class="figure">
+<img src="STLinequality_key_files/figure-html/diags1-1.png" alt="Residuals vs. fitted plot" width="1152" />
+<p class="caption">
+Residuals vs. fitted plot
+</p>
+</div>
+<p><br></p>
+<p>The Breusch-Pagan test statistic is not statistically significant (at p = 0.73), indicating constant variance of the errors. Heteroskedasticity is not present. This is also apparent from the residuals v. fitted plot where the errors seem to be randomly distributed.</p>
+<p><br> <br></p>
+<p>If you decided on the level-level or level-log model, check for linearity of income (or the log of income) with the model predictions. Do this with a plot. Interpret the plot. If you chose the quadratic model, plot the quadratic relationship. Hint: Google ggplot geom_smooth quadratic to find the code/formula to do this. Interpret the plot.</p>
+<pre class="r"><code># check for linearity
+lc &lt;- r %&gt;%
+  ggplot(aes(x=mhhi10k,y=fit))
+
+# wait, it is not a linear model but a quadratic one!
+lc &lt;- lc + geom_point() + geom_smooth(method=&quot;lm&quot;,
+                                      formula = y ~ x + I(x^2))
+lc &lt;- lc + labs(x=&quot;Median household income ($10,000s)&quot;,
+                y=&quot;Predicted Gini index&quot;)
+
+lc + theme_minimal()</code></pre>
+<div class="figure">
+<img src="STLinequality_key_files/figure-html/diags2-1.png" alt="Check for linearity of predictions" width="1152" />
+<p class="caption">
+Check for linearity of predictions
+</p>
+</div>
+<p><br></p>
+<p>The relationship between X (income) and Y (quadratic fit) follows the expected U-shaped pattern.</p>
+<p><br></p>
+</div>
+<div id="step-6-model-results" class="section level2">
+<h2>Step 6: Model results</h2>
+<p>Present the model results in a table or graph. Interpret everything you should interpret. Should you accept your alternative hypothesis or reject it? <br></p>
+<pre class="r"><code>stargazer(m3, type=&#39;html&#39;)</code></pre>
+<table style="text-align:center">
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="1" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+gini
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+mhhi10k
+</td>
+<td>
+-0.024<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.004)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+I(mhhi10k2)
+</td>
+<td>
+0.001<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.0002)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+0.521<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.013)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+305
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+R<sup>2</sup>
+</td>
+<td>
+0.131
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Adjusted R<sup>2</sup>
+</td>
+<td>
+0.125
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Residual Std. Error
+</td>
+<td>
+0.063 (df = 302)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+F Statistic
+</td>
+<td>
+22.688<sup>***</sup> (df = 2; 302)
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td style="text-align:right">
+<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05; <sup></strong></em></sup>p&lt;0.01
+</td>
+</tr>
+</table>
+<p><br> <br></p>
+<p>To calculate &amp; interpret coefficients for quadratics, we use the following formula, where <span class="math inline">\(\widehat{\beta_1}\)</span> is the coefficient on the level value of <span class="math inline">\(X\)</span>, and <span class="math inline">\(\widehat{\beta_2}\)</span> is the coefficient on the squared value of <span class="math inline">\(X\)</span>.</p>
+<p><span class="math display">\[ \widehat{\beta_1} + 2\widehat{\beta_2}X \]</span></p>
+<pre class="r"><code>myx &lt;- r %$% quantile(mhhi10k, probs=c(0.1, 0.5, 0.9))
+myxci &lt;- confint(m3)[2:3,]
+myxco &lt;- coef(m3)
+
+mycoefs &lt;- tibble(lb=rep(NA,3), est=NA, ub=NA, xs = myx)
+##FIX!!
+for (i in 1:3) {
+  mycoefs$lb[i] &lt;- myxci[1,1] + 2*myxci[2,1]*mycoefs$xs[i]
+    mycoefs$ub[i] &lt;- myxci[1,2] + 2*myxci[2,2]*mycoefs$xs[i]
+    mycoefs$est[i] &lt;- myxco[2] + 2*myxco[3]*mycoefs$xs[i]
+
+}
+
+mycoefs &lt;- mycoefs %&gt;%
+  mutate(y=1:3) %&gt;%
+  mutate(mylabs = c(&quot;Median income: $23k&quot;,
+                    &quot;Median income: $52k&quot;,
+                    &quot;Median income: $100k&quot;))
+
+g &lt;- mycoefs %&gt;%
+  ggplot(aes(x=est,xmin=lb,xmax=ub, y=y))
+
+g &lt;- g + geom_errorbarh(height=0.25) + geom_point()
+
+g &lt;- g + geom_vline(xintercept=0,color=&quot;red&quot;,linetype=2)
+
+g &lt;- g + labs(x=&quot;Estimated coefficient with 95% confidence intervals&quot;,y=&quot;&quot;) +
+  scale_y_continuous(breaks=1:3,labels= mycoefs %$% mylabs)
+
+g + theme_minimal()</code></pre>
+<div class="figure">
+<img src="STLinequality_key_files/figure-html/coefsPlot-1.png" alt="Estimated coefficient values for representative values (10th, 50th, 90th percentiles) of income" width="1152" />
+<p class="caption">
+Estimated coefficient values for representative values (10th, 50th, 90th percentiles) of income
+</p>
+</div>
+<p><br></p>
+<p>The coefficient, or predicted change in inequality for a $10,000 increase in median household income, is statistically significant only when income is low. This means that if two otherwise alike neighborhoods with median incomes of $23,000 &amp; $33,000, we would predict that the gini index would be about 0.02 less in the neighborhood with $33,000 median income. At some threshold before the median median household income of $52,000, income ceases to influence inequality, since the estimate at this income is statistically insignificant.</p>
+<p><br></p>
+</div>
+<div id="step-7-visualize-predictions" class="section level2">
+<h2>Step 7: Visualize predictions</h2>
+<p>Using points and error bars to plot median household income (in $10,000s) by the predicted values of the Gini index for St. Louis neighborhoods. Interpret the plot. Where are you most confident in the predictions? Least confident? What does this say about inequality and income in St. Louis?</p>
+<pre class="r"><code># plot predictions
+mypr &lt;- r %&gt;%
+  ggplot(aes(x=mhhi10k,y=fit,ymin=fit-1.96*seFit,
+             ymax=fit+1.96*seFit))
+
+mypr &lt;- mypr + geom_errorbar() + geom_point()
+
+mypr &lt;- mypr + labs(x=&quot;Median household income ($10,000s)&quot;,
+                    y=&quot;Predicted Gini index with 95% confidence intervals&quot;)
+
+mypr + theme_minimal()</code></pre>
+<div class="figure">
+<img src="STLinequality_key_files/figure-html/preds-1.png" alt="Inequality in St. Louis neighborhoods as predicted by income" width="1152" />
+<p class="caption">
+Inequality in St. Louis neighborhoods as predicted by income
+</p>
+</div>
+<p>Our model predicts that inequality is highest in St. Louis neighborhoods that are relatively poor, or relatively wealthy, and lowest in neighborhoods that have median household incomes of around $100,000. We are least confident in our predictions for wealthier neighborhoods, as can be seen with the wider confidence intervals, and most confident in our predictions when median income is around $50,000. Though we hypothesized that inequality would be higher as income increased, we see that inequality is highest when income is at its lowest or highest, suggesting that St. Louis neighborhoods that are about average in terms of income are the most equal in terms of the distribution of income.</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
