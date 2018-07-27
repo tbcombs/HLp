@@ -18,6 +18,8 @@ navbar:
       menu:
       - text: "Exercise 1"
         href: STLinequality_key.html
+      - text: "Exercise 2"
+        href: ChildpovMSA_key.html
 output: 
   html_document:
     theme: flatly
