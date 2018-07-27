@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>RegressionInR: Exercise 2 Multivariate model with interaction term</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">RnR: Regression exercises in R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-child"></span>
+     
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="STLinequality.html">Exercise 1</a>
+    </li>
+    <li>
+      <a href="ChildPovMSA.html">Exercise 2</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-key"></span>
+     
+    Keys
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="STLinequality_key.html">Exercise 1</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">RegressionInR: Exercise 2 Multivariate model with interaction term</h1>
+
+</div>
+
+
+<style type="text/css">
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300i,700');
+
+h1, h2, h3, h4, h5, body {
+font-family: 'Open Sans Condensed', sans-serif;
+}
+
+body{ 
+      font-size: 16pt;
+      counter-reset:table figure;
+  }
+
+.table{
+  width:auto;
+  font-size:26px;
+}
+
+th, td {
+    padding-right: 30px;
+}
+
+caption::before{
+  counter-increment: table;
+  content: "Table " counter(table) ": ";
+}
+
+.caption::before{
+  counter-increment: figure;
+  content: "Figure " counter(figure) ": ";
+}
+
+caption, .caption{
+  font-style:italic;
+  font-size: 16px;
+  margin-top:0.5em;
+  margin-bottom:0.5em;
+  width:80%;
+  text-align: left;
+}
+
+#TOC {
+  font-size: 17px;
+  width: 100%;
+}
+
+
+
+</style>
+<pre class="r"><code>&#39;# PROLOG   #################################################&#39;   
+
+&#39;# PROJECT: REGRESSION IN R EXERCISES #&#39;   
+&#39;# PURPOSE: MULTIVARIATE REGRESSION W/ INTERACTION #&#39;   
+&#39;# DIR:     Dropbox/R/RegressionInR #&#39;   
+&#39;# DATA:    R11705472_SL320.csv #&#39;   
+&#39;# AUTHOR:  Todd COMBS #&#39;   
+&#39;# CREATED: MAY 18, 2018 #&#39;   
+&#39;# LATEST:  JUL 27, 2018 #&#39;   
+&#39;# NOTES:   Multivariate regression of child poverty in MSAs #&#39;   
+&#39;#          Data from ACS 5-yr 2012-16 Social Explorer #&#39;
+&#39;# PROLOG   ################################################&#39;  </code></pre>
+<p><img src="RnRlogo.png" alt="Regression in R logo" style="float: right;"></p>
+<p><br> <br> <br> <br></p>
+<div id="todd-combs" class="section level2">
+<h2>Todd Combs</h2>
+<p>27 July, 2018</p>
+<p><br> <br> <br> <br></p>
+</div>
+<div id="child-poverty-in-us-metropolitan-statistical-areas" class="section level1">
+<h1>Child poverty in US Metropolitan Statistical Areas</h1>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p><font size="5"> You work for a non-profit that is partnering with the government to combat child poverty in urban areas. You are tasked with identifying metropolitan statistical areas (MSAs) that are most at risk for high rates of child poverty. You decide to perform an OLS regression to determine the characteristics of large urban areas that are most correlated with child poverty.</p>
+<p>You have a dataset containing a sample of 300 MSAs. Read the data into R from this url: <a href="https://raw.githubusercontent.com/tbcombs/RnR/master/MSA2016.csv" class="uri">https://raw.githubusercontent.com/tbcombs/RnR/master/MSA2016.csv</a>. You will also find variable definitions online here: <a href="https://raw.githubusercontent.com/tbcombs/RnR/master/MSA2016_dataDefs.txt" class="uri">https://raw.githubusercontent.com/tbcombs/RnR/master/MSA2016_dataDefs.txt</a>.</p>
+<p>You hypothesize that unemployment, income, and inequality are driving factors of child poverty, or that at least that each is highly correlated with child poverty. You also want to test for a relationship between child poverty and racial diversity in MSAs, and to control for average household size, since as household size increases, it is logical to believe that there are more children. Finally, you suspect that large MSAs - those with one million or more people, are qualitatively different from smaller metro areas, and in addition, you believe that large MSAs that are relatively wealthy might be more likely to have social safety net programs in place and therefore lower rates of child poverty. You will model this relationship by including an interaction term in the model between income and the dichotomous variable for large MSAs.</p>
+</div>
+<div id="step-1-read-in-data-formulate-hypotheses" class="section level2">
+<h2>Step 1: Read in data &amp; formulate hypotheses</h2>
+<p>Read in the data, review the data definitions, and formally state your hypothesis.</p>
+<p>Read the data into R. Load only the libraries that you need.</p>
+<pre class="r"><code>#libraries
+library(tidyverse)
+library(magrittr)
+library(lmtest)
+library(stargazer)
+library(car)
+library(sandwich)
+
+
+#data
+r &lt;- read_csv(&quot;https://raw.githubusercontent.com/tbcombs/RnR/master/MSA2016.csv&quot;)</code></pre>
+</div>
+<div id="step-2-visualization-of-variables-and-relationships." class="section level2">
+<h2>Step 2: Visualization of variables and relationships.</h2>
+<p>Create appropriate plots to 1) visualize the distribution of the dependent variable, 2) visualize each of the independent variables with the dependent variable, and 3) visualize the interaction between MSA size and income and its relationship with child poverty. Interpret the plots. Are the distributions approximately normal? What is the relationship? Is it linear? What else can you say about each plot?</p>
+<pre class="r"><code>g &lt;- r %&gt;%
+  ggplot(aes(x=chPov_pc))
+
+g &lt;- g + geom_histogram(binwidth = 1) + theme_minimal() 
+
+g &lt;- g + labs(y=&quot;Chidren living at or below the poverty level, % by MSA 2016&quot;)
+
+g</code></pre>
+<div class="figure">
+<img src="ChildPovMSA_key_files/figure-html/vizVars-1.png" alt="Child poverty rates in 300 MSAs, 2016" width="1152" />
+<p class="caption">
+Child poverty rates in 300 MSAs, 2016
+</p>
+</div>
+<p><br> The dependent variable, child poverty, seems to be slightly skewed right from a few unusually high observations. Otherwise, the distribution seems approximately normal.</p>
+<pre class="r"><code>r2 &lt;- r %&gt;%
+  select(2:4,7:8) %&gt;%
+  gather(key,val,-chPov_pc) %&gt;%
+  mutate(key = case_when(key==&quot;hhsz&quot;~&quot;Average household size&quot;,
+                         key==&quot;gini&quot;~&quot;Gini index of inequality&quot;,
+                         key==&quot;rd&quot;~&quot;Racial diversity index&quot;,
+                         key==&quot;unemp_pc&quot;~&quot;Unemployment rate&quot;)) %&gt;%
+  rename(`Child poverty rate`=chPov_pc)
+
+#visualize relationship
+g &lt;- r2 %&gt;%
+  ggplot(aes(x=val,y=`Child poverty rate`))
+
+g &lt;- g + geom_point() + geom_smooth(method=&quot;lm&quot;) + 
+  facet_wrap(~key, scales=&#39;free_x&#39;) + theme_minimal()
+
+g</code></pre>
+<div class="figure">
+<img src="ChildPovMSA_key_files/figure-html/vizRelation-1.png" alt="Correlations of child poverty and predictor variables in MSAs, 2016" width="1152" />
+<p class="caption">
+Correlations of child poverty and predictor variables in MSAs, 2016
+</p>
+</div>
+<p><br> The relationships here all seem positive to varying degrees. The strongest correlation looks to be between unemployment and child poverty rates in MSAs.</p>
+<pre class="r"><code>r2 &lt;- r %&gt;%
+  select(2,5,6) %&gt;%
+  mutate(big = case_when(big==0~&quot;Fewer than 1 million&quot;,
+                         big==1~&quot;1 million or more&quot;)) %&gt;%
+  rename(`Child poverty rate`=chPov_pc,
+         `Median household income ($10,000s)`=mhhi10k,
+         `MSA size`=big)
+
+#visualize relationship
+g &lt;- r2 %&gt;%
+  ggplot(aes(x= `Median household income ($10,000s)`,
+             y=`Child poverty rate`, color = `MSA size`,
+             fill = `MSA size`))
+
+g &lt;- g + geom_point() + geom_smooth(method=&quot;lm&quot;)  +
+  theme_minimal() + theme(legend.position = &#39;top&#39;)
+
+g</code></pre>
+<div class="figure">
+<img src="ChildPovMSA_key_files/figure-html/vizRelation2-1.png" alt="Correlations of child poverty and income in large and smaller MSAs, 2016" width="1152" />
+<p class="caption">
+Correlations of child poverty and income in large and smaller MSAs, 2016
+</p>
+</div>
+<p><br> Figure 3 shows the interaction of income and MSA size and child poverty. The relationship between income and child poverty is negative as expected. In smaller MSAs - those with fewer than one million people - the relationship is more negative, as seen in the slightly greater slope in the line of best fit.</p>
+</div>
+<div id="step-3-multivariate-ols-model" class="section level2">
+<h2>Step 3: Multivariate OLS model</h2>
+<p>Model child poverty (Y) on the predictors, including the interaction. Do not forget to include the categorical variable as a factor. Discuss the GOF for the model. How is the fit?</p>
+<pre class="r"><code># recode msa size
+
+r &lt;- r %&gt;%
+  mutate(big = case_when(big==0~&quot;Fewer than 1 million&quot;,
+                         big==1~&quot;1 million or more&quot;))
+
+r &lt;- r %&gt;% 
+  mutate(big = factor(big)) %&gt;%
+  mutate(big = relevel(big, &quot;Fewer than 1 million&quot;))
+#model 
+
+summary(m1 &lt;- lm(chPov_pc~ hhsz+ gini+rd+unemp_pc+mhhi10k*big,r))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = chPov_pc ~ hhsz + gini + rd + unemp_pc + mhhi10k * 
+##     big, data = r)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -9.9604 -1.5836  0.0564  1.6422  8.5958 
+## 
+## Coefficients:
+##                              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                    7.7800     4.7530   1.637 0.102740    
+## hhsz                           6.6393     0.7991   8.308 3.69e-15 ***
+## gini                          36.7162     8.0115   4.583 6.80e-06 ***
+## rd                             3.5913     1.4121   2.543 0.011501 *  
+## unemp_pc                       0.6469     0.1033   6.263 1.35e-09 ***
+## mhhi10k                       -5.0445     0.2639 -19.116  &lt; 2e-16 ***
+## big1 million or more          -9.4223     2.8918  -3.258 0.001253 ** 
+## mhhi10k:big1 million or more   1.7151     0.4968   3.452 0.000638 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.947 on 292 degrees of freedom
+## Multiple R-squared:  0.7956, Adjusted R-squared:  0.7907 
+## F-statistic: 162.3 on 7 and 292 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Overall, the model fit is good. The adjusted R-squared is 0.79, and the statistically significant F-statistic lets us know that the model is better than the null model.</p>
+</div>
+<div id="step-5-model-diagnostics" class="section level2">
+<h2>Step 5: Model diagnostics</h2>
+<p>Check the model for multicollinearity. Remember that the interaction term directly builds in multicollinearity, since two variables are represented twice. Are there other concerns about multicollinearity?</p>
+<pre class="r"><code>mv &lt;- vif(m1)
+names(mv) &lt;- c(&quot;Household size&quot;,
+               &quot;Gini inequality index&quot;,
+               &quot;Racial diversity index&quot;,
+               &quot;Unemployment rate&quot;,
+               &quot;Median household income&quot;,
+               &quot;MSA size&quot;,
+               &quot;MSA size * income&quot;)
+
+mv2 &lt;- as_tibble(mv) %&gt;%
+  mutate(vars = names(mv))
+
+g &lt;- mv2 %&gt;%
+  ggplot(aes(x=value, y=reorder(vars,value),
+             color=vars))
+
+g &lt;- g + geom_point(size=5)
+
+g &lt;- g + theme_minimal() + theme(legend.position = &#39;none&#39;)
+g &lt;- g + labs(y=&quot;&quot;,x=&quot;VIF&quot;)
+g</code></pre>
+<div class="figure">
+<img src="ChildPovMSA_key_files/figure-html/MC-1.png" alt="VIF values from regression model" width="1152" />
+<p class="caption">
+VIF values from regression model
+</p>
+</div>
+<p><br> The VIF values for the terms in the interaction are really high, as expected, but the others are small, all below 2.</p>
+<p>Check the model for heteroskedasticity visually and with a test statistic. Interpret the plot. Should you reject or fail to reject the null hypothesis of the Breush Pagan test?</p>
+<pre class="r"><code># check for heteroskedasticity
+bptest(m1)</code></pre>
+<pre><code>## 
+##  studentized Breusch-Pagan test
+## 
+## data:  m1
+## BP = 50.275, df = 7, p-value = 1.276e-08</code></pre>
+<pre class="r"><code># get residuals and fitted values with SEs
+r &lt;- r %&gt;%
+  mutate(res = as.numeric(resid(m1)),
+         fit = as.numeric(predict(m1)),
+         seFit = as.numeric(predict(m1,se=T)[[2]]))
+
+# residuals vs fitted plot
+rvf &lt;- r %&gt;%
+  ggplot(aes(x=fit,y=res))
+
+rvf &lt;- rvf + geom_point() +
+  geom_hline(yintercept = 0,color=&quot;red&quot;,linetype=2)
+
+rvf &lt;- rvf + labs(x=&quot;Fitted values&quot;,
+                  y=&quot;Residuals&quot;, 
+                  subtitle=&quot;p-value from Breusch-Pagan test: 1.276e-08&quot;) + theme_minimal()
+rvf</code></pre>
+<div class="figure">
+<img src="ChildPovMSA_key_files/figure-html/diags1-1.png" alt="Residuals vs. fitted plot" width="1152" />
+<p class="caption">
+Residuals vs. fitted plot
+</p>
+</div>
+<p><br> The Breusch-Pagan test rejects the assumption of homoskedasticity, so robust standard errors are needed. The residuals-versus-fitted plot shows more variance as the predicted values get larger, meaning that the model is better at explaining child poverty when child poverty is low.</p>
+<p>Check that the continous predictors are linear with the model predictions through visualization. Do the relationships seem sufficiently linear?</p>
+<pre class="r"><code># check for linearity
+
+r2 &lt;- r %&gt;%
+  select(3:5,7:8,10) %&gt;%
+  gather(key,val,-fit) %&gt;%
+  mutate(key = case_when(key==&quot;hhsz&quot;~&quot;Average household size&quot;,
+                         key==&quot;gini&quot;~&quot;Gini index of inequality&quot;,
+                         key==&quot;rd&quot;~&quot;Racial diversity index&quot;,
+                         key==&quot;unemp_pc&quot;~&quot;Unemployment rate&quot;,
+                         key==&quot;mhhi10k&quot;~&quot;Median household income ($10,000s)&quot;)) 
+ 
+  
+lc &lt;- r2 %&gt;%
+  ggplot(aes(x=val,y=fit))
+
+lc &lt;- lc + geom_point() + geom_smooth(method=&quot;lm&quot;)
+lc &lt;- lc + facet_wrap(~key, scales=&quot;free_x&quot;)
+lc &lt;- lc + labs(y=&quot;Fitted values&quot;, x=&quot;&quot;) + theme_minimal()
+
+lc</code></pre>
+<div class="figure">
+<img src="ChildPovMSA_key_files/figure-html/diags2-1.png" alt="Check for linearity of predictions" width="1152" />
+<p class="caption">
+Check for linearity of predictions
+</p>
+</div>
+<p><br> The relationships here in Figure 6 all seem adequately linear.</p>
+<p><br> Check for influential observations. If necessary, re-run the model without potential offending observations and compare coefficient estimates. Should you keep the whole sample or discard some influential observations?</p>
+<pre class="r"><code>g &lt;- ggplot(m1, aes(seq_along(.cooksd), .cooksd))
+r2 &lt;- as_tibble(g$data)
+r &lt;- r %&gt;%
+  mutate(cooksd = r2 %$% .cooksd)
+
+r &lt;- r %&gt;%
+  mutate(high = case_when(cooksd&gt;mean(cooksd)*3~&quot;Over 3*mean(cooks&#39;d)&quot;,
+                         cooksd&lt;=mean(cooksd)*3~&quot;Acceptable        &quot;),
+         obs = row_number()) 
+
+g &lt;- r %&gt;%
+  ggplot(aes(x=obs, y=cooksd, color=high))
+
+g &lt;- g + geom_point()
+                    
+                    
+g &lt;- g+labs(x=&quot;Obs. Number&quot;, y=&quot;Cook&#39;s distance&quot;, color=&quot;&quot;,title=&quot;Cook&#39;s distance&quot;)
+
+g &lt;- g  + theme_minimal() + theme(legend.position = &#39;top&#39;)
+
+g</code></pre>
+<div class="figure">
+<img src="ChildPovMSA_key_files/figure-html/ios-1.png" alt="Cook's d values" width="1152" />
+<p class="caption">
+Cook’s d values
+</p>
+</div>
+<p><br> The cook’s d values suggest that some MSAs might be unusual and too influential.</p>
+<pre class="r"><code>summary(m2 &lt;- lm(chPov_pc~ hhsz+ gini+rd+unemp_pc+mhhi10k*big,
+                 r %&gt;% filter(cooksd&lt;0.1)))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = chPov_pc ~ hhsz + gini + rd + unemp_pc + mhhi10k * 
+##     big, data = r %&gt;% filter(cooksd &lt; 0.1))
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -9.6213 -1.5745  0.0861  1.6398  8.8056 
+## 
+## Coefficients:
+##                                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                       6.1549     5.4067   1.138 0.255911    
+## hhsz                              4.7162     1.0725   4.397 1.55e-05 ***
+## gini                             26.8744     7.8277   3.433 0.000684 ***
+## rd                                5.4861     1.5569   3.524 0.000495 ***
+## unemp_pc                          0.7462     0.1010   7.389 1.62e-12 ***
+## mhhi10k                          -3.3092     0.4168  -7.939 4.63e-14 ***
+## bigFewer than 1 million           8.0687     2.7109   2.976 0.003165 ** 
+## mhhi10k:bigFewer than 1 million  -1.4573     0.4661  -3.127 0.001949 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.755 on 287 degrees of freedom
+## Multiple R-squared:  0.795,  Adjusted R-squared:   0.79 
+## F-statistic:   159 on 7 and 287 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><br> After re-running the model without observations that had cook’s d values greater than 0.1, many of the coefficients changed by non-ignorable amounts. This should be the final model (without the five observations).</p>
+</div>
+<div id="step-6-model-results" class="section level2">
+<h2>Step 6: Model results</h2>
+<p>Present the model results in a table or graph and confirm whether you have retained the entire sample. Interpret everything you should interpret. Should you accept your alternative hypotheses or reject them?</p>
+<pre class="r"><code># get robust errors
+m3 &lt;- coeftest(m2, vcov=vcovHC(m2))
+
+#table results
+stargazer(m3, type = &#39;html&#39;,
+          covariate.labels = c(&quot;Household size&quot;, &quot;Gini index&quot;, &quot;Racial diversity&quot;, &quot;Unemployment rate&quot;, &quot;Median income ($10k)&quot;, &quot;MSA size: 1m+&quot;,&quot;Income*size&quot;),
+          dep.var.labels   = &quot;Child poverty rate&quot;,
+          title=&quot;Model results&quot;, style=&quot;ajps&quot;, ci=T,
+          add.lines = list(c(&quot;Observations&quot;,&quot;295&quot;),
+                           c(&quot;Adjusted R-sq.&quot;,&quot;0.79&quot;)),
+          single.row = T, column.sep.width = &quot;25&quot;)</code></pre>
+<table style="text-align:center">
+<caption>
+<strong>Model results</strong>
+</caption>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+<strong>Child poverty rate</strong>
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Household size
+</td>
+<td>
+4.716<sup>***</sup> (1.830, 7.603)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Gini index
+</td>
+<td>
+26.874<sup>***</sup> (7.185, 46.564)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Racial diversity
+</td>
+<td>
+5.486<sup>***</sup> (2.201, 8.771)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Unemployment rate
+</td>
+<td>
+0.746<sup>***</sup> (0.523, 0.969)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Median income (10k)
+</td>
+<td>
+-3.309<sup>***</sup> (-3.995, -2.624)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+MSA size: 1m+
+</td>
+<td>
+8.069<sup>***</sup> (3.173, 12.964)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Income*size
+</td>
+<td>
+-1.457<sup>***</sup> (-2.295, -0.620)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+6.155 (-6.406, 18.716)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+295
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Adjusted R-sq.
+</td>
+<td>
+0.79
+</td>
+</tr>
+<tr>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td colspan="2" style="text-align:left">
+<sup><em><strong></sup>p &lt; .01; <sup></strong></sup>p &lt; .05; <sup></em></sup>p &lt; .1
+</td>
+</tr>
+</table>
+<p><br> <br> Our model explains about 80% of the variance in child poverty rates in MSAs. Household size, economic inequality, racial diversity, and MSA size are all positively correlated with child poverty, while income is negatively correlated.</p>
+</div>
+<div id="step-7-visualize-predictions" class="section level2">
+<h2>Step 7: Visualize predictions</h2>
+<p>Create some graphs to visualize the predicted rates of child poverty across representative values (or the ranges) of the predictors. Create at least one graph depicting how the interaction affects predictions. Also, two coefficients are directly comparable. Which are they, and how do they compare substantively?</p>
+<pre class="r"><code>#FUNCTION FOR HETEROSKEDASTICITY CONSISTENT PREDICTIONS
+# mod = model name; newdata = new data frame for predictions
+predict.HCC &lt;- function(mod,newdata){
+  require(tidyverse)
+  require(lmtest)
+  require(AER)
+  if(missing(newdata)){ newdata &lt;- mod$model }
+  m.mat &lt;- model.matrix(mod$terms,data=newdata)
+  fit &lt;- as.vector(m.mat %*% mod$coef)
+  newvcov &lt;- vcovHC(mod)
+  se.fit &lt;- sqrt(diag(m.mat %*% newvcov %*% t(m.mat)))
+  return(tibble(fit=fit,se=se.fit))
+}
+
+#create new datasets to explore predictions for the two indexes.
+r2 &lt;- as_tibble(m2$model)
+
+gg &lt;- r2 %&gt;%
+  mutate_at(vars(hhsz, rd, unemp_pc, mhhi10k),
+            .funs = function(x) x=mean(x)) %&gt;%
+  mutate(gini = seq(quantile(gini,0.1),
+                    quantile(gini, 0.9),
+                    length.out = nrow(r2))) %&gt;%
+  mutate(big = c(rep(c(&quot;Fewer than 1 million&quot;,
+                     &quot;1 million or more&quot;),nrow(r2)/2),
+                 &quot;Fewer than 1 million&quot;))
+
+rr &lt;- r2 %&gt;%
+  mutate_at(vars(hhsz, gini, unemp_pc, mhhi10k),
+            .funs = function(x) x=mean(x)) %&gt;%
+  mutate(rd = seq(quantile(rd,0.1),
+                    quantile(rd, 0.9),
+                    length.out = nrow(r2))) %&gt;%
+  mutate(big = c(rep(c(&quot;Fewer than 1 million&quot;,
+                     &quot;1 million or more&quot;),nrow(r2)/2),
+                 &quot;Fewer than 1 million&quot;))
+# get predictions
+gp &lt;- predict.HCC(m2,gg)
+rp &lt;- predict.HCC(m2,rr)
+
+# add values for gini + rd
+gp &lt;- gp %&gt;% mutate(var=gg %$% gini, lab=&quot;Gini index&quot;) %&gt;%
+  mutate(big = c(rep(c(&quot;Fewer than 1 million&quot;,
+                     &quot;1 million or more&quot;),nrow(r2)/2),
+                 &quot;Fewer than 1 million&quot;))
+rp &lt;- rp %&gt;% mutate(var=rr %$% rd, lab=&quot;Racial diversity index&quot;) %&gt;%
+  mutate(big = c(rep(c(&quot;Fewer than 1 million&quot;,
+                     &quot;1 million or more&quot;),nrow(r2)/2),
+                 &quot;Fewer than 1 million&quot;))
+gr &lt;- bind_rows(gp,rp)
+
+# get CIs
+gr &lt;- gr %&gt;%
+  mutate(lb=fit-1.96*se,
+         ub=fit+1.96*se)
+
+#plot
+
+g &lt;- gr %&gt;%
+  ggplot(aes(x=var,y=fit,ymin=lb,ymax=ub,color=big,fill=big))
+g &lt;- g + geom_ribbon(alpha=0.4) + geom_line()
+g &lt;- g + facet_wrap(~lab) + theme_minimal() +
+  labs(fill=&quot;&quot;,color=&quot;&quot;, x=&quot;&quot;,y=&quot;Predicted child poverty rate (%)&quot;)
+g</code></pre>
+<div class="figure">
+<img src="ChildPovMSA_key_files/figure-html/preds1-1.png" alt="Economic inequality &amp; racial diversity: predicted values of child poverty in MSAs" width="1152" />
+<p class="caption">
+Economic inequality &amp; racial diversity: predicted values of child poverty in MSAs
+</p>
+</div>
+<p><br></p>
+<p>Economic inequality (Gini) and the racial diversity index both are ratios between 0 and 1 and therefore their effects can be directly compared. Figure 8 shows the predicted values of child poverty in the average MSA. For each plot, all other variables were held at their mean, and only the variable in question was allowed to vary. Each ranges from its 10th to 90th percentile. We see that the slope for the Gini index is much steeper than that of the racial diversity index when the x-axis is forced to be the same in both plots. This illustrates the MUCH larger effect of economic inequality on child poverty than that of racial diversity. Indeed, the coefficient for the Gini index is more than five times that of racial diversity. In each of these plots, we see parallel lines for large or smaller MSAs, which is expected, since the interaction term was for income, not for either of these variables.</p>
+<pre class="r"><code>#create new datasets to explore predictions for the two vars.
+r2 &lt;- as_tibble(m2$model)
+
+hh &lt;- r2 %&gt;%
+  mutate_at(vars(gini, rd, unemp_pc, mhhi10k),
+            .funs = function(x) x=mean(x)) %&gt;%
+  mutate(hhsz = seq(quantile(hhsz,0.1),
+                    quantile(hhsz, 0.9),
+                    length.out = nrow(r2))) %&gt;%
+  mutate(big = c(rep(c(&quot;Fewer than 1 million&quot;,
+                     &quot;1 million or more&quot;),nrow(r2)/2),
+                 &quot;Fewer than 1 million&quot;))
+
+uu &lt;- r2 %&gt;%
+  mutate_at(vars(hhsz, gini, rd, mhhi10k),
+            .funs = function(x) x=mean(x)) %&gt;%
+  mutate(unemp_pc = seq(quantile(unemp_pc,0.1),
+                    quantile(unemp_pc, 0.9),
+                    length.out = nrow(r2))) %&gt;%
+  mutate(big = c(rep(c(&quot;Fewer than 1 million&quot;,
+                     &quot;1 million or more&quot;),nrow(r2)/2),
+                 &quot;Fewer than 1 million&quot;))
+# get predictions
+hp &lt;- predict.HCC(m2,hh)
+up &lt;- predict.HCC(m2,uu)
+
+# add values for unemp + hhsz
+hp &lt;- hp %&gt;% mutate(var=hh %$% hhsz, lab=&quot;Household size&quot;) %&gt;%
+  mutate(big = c(rep(c(&quot;Fewer than 1 million&quot;,
+                     &quot;1 million or more&quot;),nrow(r2)/2),
+                 &quot;Fewer than 1 million&quot;))
+up &lt;- up %&gt;% mutate(var=uu %$% unemp_pc, lab=&quot;Unemployment rate&quot;) %&gt;%
+  mutate(big = c(rep(c(&quot;Fewer than 1 million&quot;,
+                     &quot;1 million or more&quot;),nrow(r2)/2),
+                 &quot;Fewer than 1 million&quot;))
+gr &lt;- bind_rows(hp,up)
+
+# get CIs
+gr &lt;- gr %&gt;%
+  mutate(lb=fit-1.96*se,
+         ub=fit+1.96*se)
+
+#plot
+
+g &lt;- gr %&gt;%
+  ggplot(aes(x=var,y=fit,ymin=lb,ymax=ub,color=big,fill=big))
+g &lt;- g + geom_ribbon(alpha=0.4) + geom_line()
+g &lt;- g + facet_wrap(~lab, scales = &quot;free_x&quot;) + theme_minimal() +
+  labs(fill=&quot;&quot;,color=&quot;&quot;, x=&quot;&quot;,y=&quot;Predicted child poverty rate (%)&quot;)
+g</code></pre>
+<div class="figure">
+<img src="ChildPovMSA_key_files/figure-html/preds2-1.png" alt="Unemployment &amp; household size: predicted values of child poverty in MSAs" width="1152" />
+<p class="caption">
+Unemployment &amp; household size: predicted values of child poverty in MSAs
+</p>
+</div>
+<p><br> Both household size and unemployment are positively related to child poverty, as expected (Figure 9). In large MSAs, we see that a 0.4 increase in the average household size predicts about a 2% increase in child poverty, all else equal. For unemployment, a difference of 4% (from 6 to 10% unemployment) predicts a difference of about 3%, all else equal.</p>
+<pre class="r"><code>#create new dataset to explore predictions for the interaction.
+r2 &lt;- as_tibble(m2$model)
+
+inc &lt;- r2 %&gt;%
+  mutate_at(vars(gini, rd, unemp_pc, hhsz),
+            .funs = function(x) x=mean(x)) %&gt;%
+  mutate(mhhi10k = seq(quantile(mhhi10k,0.1),
+                    quantile(mhhi10k, 0.9),
+                    length.out = nrow(r2))) %&gt;%
+  mutate(big = c(rep(c(&quot;Fewer than 1 million&quot;,
+                     &quot;1 million or more&quot;),nrow(r2)/2),
+                 &quot;Fewer than 1 million&quot;))
+
+
+# get predictions
+ip &lt;- predict.HCC(m2,inc)
+
+# add values for income
+ip &lt;- ip %&gt;% mutate(var=inc %$% mhhi10k, lab=&quot;Median HH income ($10,000s&quot;) %&gt;%
+  mutate(big = c(rep(c(&quot;Fewer than 1 million&quot;,
+                     &quot;1 million or more&quot;),nrow(r2)/2),
+                 &quot;Fewer than 1 million&quot;))
+
+
+# get CIs
+ip &lt;- ip %&gt;%
+  mutate(lb=fit-1.96*se,
+         ub=fit+1.96*se)
+
+#plot
+
+g &lt;- ip %&gt;%
+  ggplot(aes(x=var,y=fit,ymin=lb,ymax=ub,color=big,fill=big))
+g &lt;- g + geom_ribbon(alpha=0.4) + geom_line()
+g &lt;- g  + theme_minimal() +
+  labs(fill=&quot;&quot;,color=&quot;&quot;, x=&quot;Median HH income in $10,000s&quot;,
+       y=&quot;Predicted child poverty rate (%)&quot;)
+g</code></pre>
+<div class="figure">
+<img src="ChildPovMSA_key_files/figure-html/preds3-1.png" alt="Income &amp; MSA size: predicted values of child poverty in MSAs" width="1152" />
+<p class="caption">
+Income &amp; MSA size: predicted values of child poverty in MSAs
+</p>
+</div>
+<p><br> Figure 10 shows the interaction of income and MSA size and the predicted values of child poverty. Though the confidence intervals overlap, we see a slightly larger negative slope in large MSAs, resulting in higher predictions versus smaller MSAs when incomes are lower, but lower predictions versus smaller MSAs when incomes are larger ($60k and above). We also see that the size of the MSA matters least when incomes are average (around the middle of the plot, or ~$52k). The predictions here for both sizes of MSA are closest and most overlapping.</p>
+</div>
+<div id="step-8-discussion" class="section level2">
+<h2>Step 8: Discussion</h2>
+<p>What are your recommendations for choosing MSAs in which to implement the anti-child poverty program? Which characteristics do you think are most important?</p>
+<p>Recommendations should include looking at income, unemployment and economic inequality as important correlates of child poverty, also - to a lesser extent - providers should consider racial diversity when choosing program locations.</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
