@@ -9,9 +9,11 @@
 <meta name="generator" content="pandoc" />
 
 
+<meta name="author" content="Todd Combs" />
 
+<meta name="date" content="2018-07-29" />
 
-<title>keysub.utf8</title>
+<title>Atheists Feeling Thermometer</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -241,16 +243,133 @@ $(document).ready(function () {
 
 
 
+<h1 class="title toc-ignore">Atheists Feeling Thermometer</h1>
+<h4 class="author"><em>Todd Combs</em></h4>
+<h4 class="date"><em>July 29, 2018</em></h4>
 
 </div>
 
 
-<p><br><br><br><br> None yet.</p>
-<p>Did you even try to do Exercise 1 before coming here to cheat?</p>
-<p><br><br></p>
-<p><img src="cryer.png" /></p>
-<p><br><br></p>
-<p>Please try back later.</p>
+<style type="text/css">
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300i,700');
+
+h1, h2, h3, h4, h5, body {
+font-family: 'Open Sans Condensed', sans-serif;
+}
+
+body{ 
+      font-size: 16pt;
+      counter-reset:table figure;
+  }
+
+.table{
+  width:auto;
+  font-size:26px;
+}
+
+th, td {
+    padding-right: 30px;
+}
+
+caption::before{
+  counter-increment: table;
+  content: "Table " counter(table) ": ";
+}
+
+.caption::before{
+  counter-increment: figure;
+  content: "Figure " counter(figure) ": ";
+}
+
+caption, .caption{
+  font-style:italic;
+  font-size: 16px;
+  margin-top:0.5em;
+  margin-bottom:0.5em;
+  width:80%;
+  text-align: left;
+}
+
+#TOC {
+  font-size: 17px;
+  width: 100%;
+}
+
+
+
+</style>
+<p><img src="RnRlogo.png" alt="Regression in R logo" style="float: right;"></p>
+<p><br> <br> <br> <br></p>
+<div id="todd-combs" class="section level2">
+<h2>Todd Combs</h2>
+<p>29 July, 2018</p>
+<p><br> <br> <br> <br></p>
+</div>
+<div id="feelings-toward-atheists-cooling-in-america" class="section level1">
+<h1>Feelings toward Atheists cooling in America</h1>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p><font size="5"></p>
+<p>Historically, results from Pew Religion surveys have shown that of religious groups, Americans’ feelings were coldest for Muslims, and second coldest toward atheists. In 2017, feelings toward atheists warmed, but still practically matched those toward Muslims. You will investigate which types of people have cool or warm feelings toward atheists.</p>
+<p>Find and download the American Trends Panel Wave 24 from Pew Religion surveys at: <a href="http://www.pewforum.org/datasets/" class="uri">http://www.pewforum.org/datasets/</a>. You will have to sign up or provide an email address to download the data. The other files (<em>e.g.</em>, topline, questionnaire) come with the dataset and will be helpful.</p>
+</div>
+<div id="step-1-read-in-data" class="section level2">
+<h2>Step 1: Read in data</h2>
+<p>Read the data into R. Load only the libraries that you need.</p>
+<p>You may also find the adjusted R-squared function we wrote last semester:</p>
+<pre class="r"><code>ar2 &lt;- function (srm) # where srm is the survey regression model object
+{
+  r2 = (srm$null.deviance - srm$deviance)/srm$null.deviance
+  adjust = srm$df.null/(srm$df.null - length(coef(srm)))
+  value = 1 - ((1 - r2) * adjust)
+  return(value)
+} 
+
+# Then use ar2(YOURMODELNAME) to calculate the value.</code></pre>
+</div>
+<div id="step-2-data-management" class="section level2">
+<h2>Step 2: Data management</h2>
+<p>Find the following variables and rename them with brief, descriptive names, then subset the data to remove all other variables:</p>
+<ul>
+<li>REL3F_W24</li>
+<li>WEIGHT_W24</li>
+<li>F_RELIG_FINAL</li>
+<li>F_IDEO_FINAL</li>
+<li>F_INCOME_FINAL</li>
+<li>F_RACETHN_RECRUITMENT</li>
+<li>F_EDUCCAT_FINAL</li>
+<li>F_AGECAT_FINAL</li>
+<li>F_CREGION_FINAL</li>
+<li>F_SEX_FINAL</li>
+<li>REL5_W24</li>
+<li>KIND1_W24</li>
+</ul>
+<p>Recode the variables into factors. Create five categories for religion: Protestant, Catholic, Atheist/Agnostic, Not religious, and Other (all others). Create three categories for income: less than $30k, $30-75k, &amp; $75 and over. Create descriptve factor level names for all variables except the atheist feeling thermometer and the weighting variable.</p>
+<p>Next, declare the data as a survey design.</p>
+</div>
+<div id="step-3-data-visualization" class="section level2">
+<h2>STEP 3: Data visualization</h2>
+<p>Since all the predictor variables are factors, use the <code>svyby</code> function to create accurately weighted mean atheist feeling thermometer values for the different categories of each variable. Use these to create descriptive plots.</p>
+</div>
+<div id="step-4-model" class="section level2">
+<h2>STEP 4: Model</h2>
+<p>Execute the model. Inspect the results. Remove the three variables that are least significant. Compute the adjusted R-squared value for the second model.</p>
+</div>
+<div id="step-5-diagnostics" class="section level2">
+<h2>STEP 5: Diagnostics</h2>
+<p>Since the <code>svyglm</code> function computes robust standard errors, this should be sufficient in terms of potentially heteroskedastic errors. Also, since all of the predictors are categorical, it is unnecessary (and impossible) to check for linear relationships. Check the model for influential observations. Create a plot of the cook’s d values and re-run the model without influential observations if necessary. Compare the estimates and decide what to do.</p>
+</div>
+<div id="step-6-model-results" class="section level2">
+<h2>STEP 6: Model results</h2>
+<p>Create a coefficient plot of the estimates from the model. Discuss the overall model fit and interpret each statistically significant coefficient.</p>
+</div>
+<div id="step-7-predictions" class="section level2">
+<h2>STEP 7: Predictions</h2>
+<p>Create a plot that compares the predicted atheist feeling thermometer values for the average respondent who is politically liberal with one that is conservative.</p>
+<p>Create at least one more comparison plot and discuss both.</p>
+</div>
+</div>
 
 
 

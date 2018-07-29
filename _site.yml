@@ -13,6 +13,8 @@ navbar:
         href: STLinequality.html
       - text: "Exercise 2"
         href: ChildPovMSA.html
+      - text: "Exercise 3"
+        href: Atheists.html
     - text: "Keys" 
       icon: fa-key
       menu:
@@ -20,6 +22,7 @@ navbar:
         href: STLinequality_key.html
       - text: "Exercise 2"
         href: ChildPovMSA_key.html
+      - text: "Exercise 3"
         
 output: 
   html_document:
