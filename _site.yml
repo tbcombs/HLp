@@ -23,6 +23,8 @@ navbar:
       - text: "Exercise 2"
         href: ChildPovMSA_key.html
       - text: "Exercise 3"
+        href: Atheists_key.html
+    
         
 output: 
   html_document:
