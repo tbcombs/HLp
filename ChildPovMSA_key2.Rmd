@@ -545,17 +545,16 @@ inc <- r2 %>%
                      "1 million or more"),nrow(r2)/2),
                  "Fewer than 1 million"))
 
-
+inc <- inc %>%
+  mutate(big = factor(big, levels=r2 %$% levels(big)))
 # get predictions
 ip <- predict.HCC(m2,inc)
 
 # add values for income
 ip <- ip %>% mutate(var=inc %$% mhhi10k, lab="Median HH income ($10,000s") %>%
-  mutate(big = c(rep(c("Fewer than 1 million",
-                     "1 million or more"),nrow(r2)/2),
-                 "Fewer than 1 million"))
+  mutate(big = inc %$% big)
 
-
+ip <- ip %>% mutate(big = relevel(big, "1 million or more"))
 # get CIs
 ip <- ip %>%
   mutate(lb=fit-1.96*se,
@@ -566,11 +565,10 @@ ip <- ip %>%
 g <- ip %>%
   ggplot(aes(x=var,y=fit,ymin=lb,ymax=ub,color=big,fill=big))
 g <- g + geom_ribbon(alpha=0.4) + geom_line()
-g <- g  + theme_minimal() +
+g <- g  + theme_minimal() + theme(legend.position='top') +
   labs(fill="",color="", x="Median HH income in $10,000s",
        y="Predicted child poverty rate (%)")
 g
-
 
 
 

@@ -313,7 +313,7 @@ caption, .caption{
 <p><br> <br> <br> <br></p>
 <div id="todd-combs" class="section level2">
 <h2>Todd Combs</h2>
-<p>14 August, 2018</p>
+<p>15 August, 2018</p>
 <p><br> <br> <br> <br></p>
 </div>
 <div id="child-poverty-in-us-metropolitan-statistical-areas" class="section level1">
@@ -869,17 +869,16 @@ inc &lt;- r2 %&gt;%
                      &quot;1 million or more&quot;),nrow(r2)/2),
                  &quot;Fewer than 1 million&quot;))
 
-
+inc &lt;- inc %&gt;%
+  mutate(big = factor(big, levels=r2 %$% levels(big)))
 # get predictions
 ip &lt;- predict.HCC(m2,inc)
 
 # add values for income
 ip &lt;- ip %&gt;% mutate(var=inc %$% mhhi10k, lab=&quot;Median HH income ($10,000s&quot;) %&gt;%
-  mutate(big = c(rep(c(&quot;Fewer than 1 million&quot;,
-                     &quot;1 million or more&quot;),nrow(r2)/2),
-                 &quot;Fewer than 1 million&quot;))
+  mutate(big = inc %$% big)
 
-
+ip &lt;- ip %&gt;% mutate(big = relevel(big, &quot;1 million or more&quot;))
 # get CIs
 ip &lt;- ip %&gt;%
   mutate(lb=fit-1.96*se,
@@ -890,7 +889,7 @@ ip &lt;- ip %&gt;%
 g &lt;- ip %&gt;%
   ggplot(aes(x=var,y=fit,ymin=lb,ymax=ub,color=big,fill=big))
 g &lt;- g + geom_ribbon(alpha=0.4) + geom_line()
-g &lt;- g  + theme_minimal() +
+g &lt;- g  + theme_minimal() + theme(legend.position=&#39;top&#39;) +
   labs(fill=&quot;&quot;,color=&quot;&quot;, x=&quot;Median HH income in $10,000s&quot;,
        y=&quot;Predicted child poverty rate (%)&quot;)
 g</code></pre>
