@@ -352,7 +352,7 @@ g &lt;- g + labs(y=&quot;Chidren living at or below the poverty level, % by MSA 
 
 g</code></pre>
 <div class="figure">
-<img src="ChildPovMSA_key_files/figure-html/vizVars-1.png" alt="Child poverty rates in 300 MSAs, 2016" width="1152" />
+<img src="ChildPovMSA_key2_files/figure-html/vizVars-1.png" alt="Child poverty rates in 300 MSAs, 2016" width="1152" />
 <p class="caption">
 Child poverty rates in 300 MSAs, 2016
 </p>
@@ -376,7 +376,7 @@ g &lt;- g + geom_point() + geom_smooth(method=&quot;lm&quot;) +
 
 g</code></pre>
 <div class="figure">
-<img src="ChildPovMSA_key_files/figure-html/vizRelation-1.png" alt="Correlations of child poverty and predictor variables in MSAs, 2016" width="1152" />
+<img src="ChildPovMSA_key2_files/figure-html/vizRelation-1.png" alt="Correlations of child poverty and predictor variables in MSAs, 2016" width="1152" />
 <p class="caption">
 Correlations of child poverty and predictor variables in MSAs, 2016
 </p>
@@ -401,7 +401,7 @@ g &lt;- g + geom_point() + geom_smooth(method=&quot;lm&quot;)  +
 
 g</code></pre>
 <div class="figure">
-<img src="ChildPovMSA_key_files/figure-html/vizRelation2-1.png" alt="Correlations of child poverty and income in large and smaller MSAs, 2016" width="1152" />
+<img src="ChildPovMSA_key2_files/figure-html/vizRelation2-1.png" alt="Correlations of child poverty and income in large and smaller MSAs, 2016" width="1152" />
 <p class="caption">
 Correlations of child poverty and income in large and smaller MSAs, 2016
 </p>
@@ -475,7 +475,7 @@ g &lt;- g + theme_minimal() + theme(legend.position = &#39;none&#39;)
 g &lt;- g + labs(y=&quot;&quot;,x=&quot;VIF&quot;)
 g</code></pre>
 <div class="figure">
-<img src="ChildPovMSA_key_files/figure-html/MC-1.png" alt="VIF values from regression model" width="1152" />
+<img src="ChildPovMSA_key2_files/figure-html/MC-1.png" alt="VIF values from regression model" width="1152" />
 <p class="caption">
 VIF values from regression model
 </p>
@@ -507,7 +507,7 @@ rvf &lt;- rvf + labs(x=&quot;Fitted values&quot;,
                   subtitle=&quot;p-value from Breusch-Pagan test: 1.276e-08&quot;) + theme_minimal()
 rvf</code></pre>
 <div class="figure">
-<img src="ChildPovMSA_key_files/figure-html/diags1-1.png" alt="Residuals vs. fitted plot" width="1152" />
+<img src="ChildPovMSA_key2_files/figure-html/diags1-1.png" alt="Residuals vs. fitted plot" width="1152" />
 <p class="caption">
 Residuals vs. fitted plot
 </p>
@@ -535,7 +535,7 @@ lc &lt;- lc + labs(y=&quot;Fitted values&quot;, x=&quot;&quot;) + theme_minimal(
 
 lc</code></pre>
 <div class="figure">
-<img src="ChildPovMSA_key_files/figure-html/diags2-1.png" alt="Check for linearity of predictions" width="1152" />
+<img src="ChildPovMSA_key2_files/figure-html/diags2-1.png" alt="Check for linearity of predictions" width="1152" />
 <p class="caption">
 Check for linearity of predictions
 </p>
@@ -564,7 +564,7 @@ g &lt;- g  + theme_minimal() + theme(legend.position = &#39;top&#39;)
 
 g</code></pre>
 <div class="figure">
-<img src="ChildPovMSA_key_files/figure-html/ios-1.png" alt="Cook's d values" width="1152" />
+<img src="ChildPovMSA_key2_files/figure-html/ios-1.png" alt="Cook's d values" width="1152" />
 <p class="caption">
 Cook’s d values
 </p>
@@ -582,15 +582,15 @@ Cook’s d values
 ## -9.6213 -1.5745  0.0861  1.6398  8.8056 
 ## 
 ## Coefficients:
-##                                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)                       6.1549     5.4067   1.138 0.255911    
-## hhsz                              4.7162     1.0725   4.397 1.55e-05 ***
-## gini                             26.8744     7.8277   3.433 0.000684 ***
-## rd                                5.4861     1.5569   3.524 0.000495 ***
-## unemp_pc                          0.7462     0.1010   7.389 1.62e-12 ***
-## mhhi10k                          -3.3092     0.4168  -7.939 4.63e-14 ***
-## bigFewer than 1 million           8.0687     2.7109   2.976 0.003165 ** 
-## mhhi10k:bigFewer than 1 million  -1.4573     0.4661  -3.127 0.001949 ** 
+##                              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                   14.2236     5.1235   2.776 0.005862 ** 
+## hhsz                           4.7162     1.0725   4.397 1.55e-05 ***
+## gini                          26.8744     7.8277   3.433 0.000684 ***
+## rd                             5.4861     1.5569   3.524 0.000495 ***
+## unemp_pc                       0.7462     0.1010   7.389 1.62e-12 ***
+## mhhi10k                       -4.7665     0.2503 -19.042  &lt; 2e-16 ***
+## big1 million or more          -8.0687     2.7109  -2.976 0.003165 ** 
+## mhhi10k:big1 million or more   1.4573     0.4661   3.127 0.001949 ** 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
@@ -669,7 +669,7 @@ Unemployment rate
 Median income (10k)
 </td>
 <td>
--3.309<sup>***</sup> (-3.995, -2.624)
+-4.767<sup>***</sup> (-5.306, -4.227)
 </td>
 </tr>
 <tr>
@@ -677,7 +677,7 @@ Median income (10k)
 MSA size: 1m+
 </td>
 <td>
-8.069<sup>***</sup> (3.173, 12.964)
+-8.069<sup>***</sup> (-12.964, -3.173)
 </td>
 </tr>
 <tr>
@@ -685,7 +685,7 @@ MSA size: 1m+
 Income*size
 </td>
 <td>
--1.457<sup>***</sup> (-2.295, -0.620)
+1.457<sup>***</sup> (0.620, 2.295)
 </td>
 </tr>
 <tr>
@@ -693,7 +693,7 @@ Income*size
 Constant
 </td>
 <td>
-6.155 (-6.406, 18.716)
+14.224<sup>**</sup> (2.219, 26.228)
 </td>
 </tr>
 <tr>
@@ -792,7 +792,7 @@ g &lt;- g + facet_wrap(~lab) + theme_minimal() +
   labs(fill=&quot;&quot;,color=&quot;&quot;, x=&quot;&quot;,y=&quot;Predicted child poverty rate (%)&quot;)
 g</code></pre>
 <div class="figure">
-<img src="ChildPovMSA_key_files/figure-html/preds1-1.png" alt="Economic inequality &amp; racial diversity: predicted values of child poverty in MSAs" width="1152" />
+<img src="ChildPovMSA_key2_files/figure-html/preds1-1.png" alt="Economic inequality &amp; racial diversity: predicted values of child poverty in MSAs" width="1152" />
 <p class="caption">
 Economic inequality &amp; racial diversity: predicted values of child poverty in MSAs
 </p>
@@ -850,7 +850,7 @@ g &lt;- g + facet_wrap(~lab, scales = &quot;free_x&quot;) + theme_minimal() +
   labs(fill=&quot;&quot;,color=&quot;&quot;, x=&quot;&quot;,y=&quot;Predicted child poverty rate (%)&quot;)
 g</code></pre>
 <div class="figure">
-<img src="ChildPovMSA_key_files/figure-html/preds2-1.png" alt="Unemployment &amp; household size: predicted values of child poverty in MSAs" width="1152" />
+<img src="ChildPovMSA_key2_files/figure-html/preds2-1.png" alt="Unemployment &amp; household size: predicted values of child poverty in MSAs" width="1152" />
 <p class="caption">
 Unemployment &amp; household size: predicted values of child poverty in MSAs
 </p>
@@ -895,12 +895,12 @@ g &lt;- g  + theme_minimal() +
        y=&quot;Predicted child poverty rate (%)&quot;)
 g</code></pre>
 <div class="figure">
-<img src="ChildPovMSA_key_files/figure-html/preds3-1.png" alt="Income &amp; MSA size: predicted values of child poverty in MSAs" width="1152" />
+<img src="ChildPovMSA_key2_files/figure-html/preds3-1.png" alt="Income &amp; MSA size: predicted values of child poverty in MSAs" width="1152" />
 <p class="caption">
 Income &amp; MSA size: predicted values of child poverty in MSAs
 </p>
 </div>
-<p><br> Figure 10 shows the interaction of income and MSA size and the predicted values of child poverty. Though the confidence intervals overlap, we see a slightly larger negative slope in large MSAs, resulting in higher predictions versus smaller MSAs when incomes are lower, but lower predictions versus smaller MSAs when incomes are larger ($60k and above). We also see that the size of the MSA matters least when incomes are average (around the middle of the plot, or ~$52k). The predictions here for both sizes of MSA are closest and most overlapping.</p>
+<p><br> Figure 10 shows the interaction of income and MSA size and the predicted values of child poverty. Though the confidence intervals overlap (which does <em>NOT NECESSARILY</em> mean there is no statistically significant difference in the predictions - more on this later), we see a slightly larger negative slope in smaller MSAs, resulting in higher predictions versus large MSAs when incomes are lower, but lower predictions versus large MSAs when incomes are larger ($60k and above). Essentially, we see that in more populous MSAs, the large population size (or some latent related factor(s)) mediates the influence of income on child poverty, hence the lesser absolute value of the slope. We also see that the size of the MSA matters least when incomes are average (around the middle of the plot, or ~$52k). The predictions here for both sizes of MSA are closest and most overlapping.</p>
 </div>
 <div id="step-8-discussion" class="section level2">
 <h2>Step 8: Discussion</h2>
