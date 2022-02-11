@@ -24,7 +24,9 @@ navbar:
         href: ChildPovMSA_key2.html
       - text: "Exercise 3"
         href: Atheists_key.html
-    
+    - text: "HLp-graphics" 
+        href: Seeser_HLpViz.html
+
         
 output: 
   html_document:

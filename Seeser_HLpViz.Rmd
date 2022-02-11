@@ -1,0 +1,367 @@
+---
+title: "State HLp Annual Rates"
+subtitle: "2007-2019"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+[//]: # CSS style arguments
+
+<style type="text/css">
+
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i&display=swap");
+
+h1, h2, h3, h4, h5, body, ul, ol, p {
+font-family: 'Open Sans', sans-serif;
+
+}
+
+body{ /* Normal  */
+      font-size: 20px;
+      counter-reset:table figure;
+  }
+
+.table{
+  width:auto;
+  font-size:12px;
+}
+
+td, th{
+  padding-left:10px;
+  text-align: right;
+}
+
+caption::before{
+  counter-increment: table;
+  content: "Table " counter(table) ": ";
+}
+
+.caption::before{
+  counter-increment: figure;
+  content: "Figure " counter(figure) ": ";
+}
+
+caption, .caption{
+  font-style:italic;
+  font-size: 16px;
+  margin-top:0.5em;
+  margin-bottom:0.5em;
+  width:80%;
+  text-align: left;
+}
+
+#TOC {
+  font-size: 17px;
+  width: 100%;
+}
+
+</style>
+
+```{r knitOpts, echo=F}
+knitr::opts_chunk$set(fig.width=12, fig.height=10, warning=FALSE, message=FALSE, cache=F, results = 'show', echo=F)
+
+```
+
+```{r prolog, results='hide'}
+
+
+'# PROLOG   ################################################################'
+
+'# PROJECT: J SEESER DATA VIZ #'
+'# PURPOSE: HLp SCORES #'
+'# DIR:     C:/Users/toddc/Box/CPHSS ADMIN/CPHSS/JSeeser #'
+'# DATA:    Copy of Historical HLp and EI analysis for Piccarrillo.xlsx #'
+'# AUTHOR:  TODD COMBS  #'
+'# CREATED: FEB 8, 2022 #'
+'# LATEST:  FEB 9, 2022 #'
+'# NOTES:    #'
+
+'# PROLOG   ###############################################################'
+
+
+```
+
+
+```{r data}
+
+# LIBRARIES ---------------------------------------------------------------
+
+
+
+library(magrittr) # for extra pipes
+library(tidyverse) # for ggplot2,tibble,tidyr,readr,purrr,dplyr,stringr,forcats
+library(plotly) # for interactive plots
+library(readxl) # open xlsx
+library(crosstalk)
+
+#get file names
+x <- list.files()
+x <- x[str_detect(x,'xlsx|Copy')]
+x <- x[!str_detect(x,'~')]
+
+#read in data
+r <- read_xlsx(x, sheet = 3, skip=6)
+
+#remove empty row
+r <- r %>% 
+  slice(1:53)
+# remove empty column
+r <- r %>% 
+  select(-`2020`)
+
+# get abbreviations
+x <- read_csv('StateAbbr.csv')
+
+# add labels for aggregates
+x2 <- tibble(State=c('US','State average',"State median"),
+             Abbr = c('US','Mean','Median'))
+x <- x %>% 
+  bind_rows(x2)
+
+
+# add abbr to dataset
+r <- r %>% 
+  mutate(STAB = x$Abbr)
+
+# transform to long format
+r <- r %>% 
+  pivot_longer(r,
+               cols=2:14,
+               names_to = 'Year',
+               values_to = 'HLp')
+
+# make year a num
+r <- r %>% 
+  mutate(Year=as.numeric(Year))
+
+
+
+# ranking
+r2 <- r %>% 
+  filter(!STAB %in% c('US','Median','Mean'))
+
+r2 <- r2 %>% 
+  group_by(STAB,Year) %>% 
+  arrange(Year,desc(HLp)) %>% 
+  ungroup() %>% 
+  mutate(Rank = rep(1:50,13))
+
+rq <- r2 %>% 
+  select(Year,HLp) %>% 
+  group_by(Year) %>%
+  mutate(one = as.numeric(quantile(HLp, c(0.25), na.rm = T)),
+         two = as.numeric(quantile(HLp, c(0.5), na.rm = T)),
+         three = as.numeric(quantile(HLp, c(0.75), na.rm = T))) %>% 
+  select(-HLp) %>% 
+  distinct()
+
+x <- list()
+
+for (i in 1:13) {
+  xx <- r2 %>% filter(Year == unique(r2$Year)[i])
+  rqa <- rq %>% 
+    ungroup() %>% 
+    slice(i) %>% select(2:4) %$% unlist(.)
+  xx <- xx %>% 
+    mutate(Quartile = case_when(HLp < rqa[1]~"Lowest",
+                                HLp>=rqa[1] & HLp<rqa[2]~"Mod Low",
+                                HLp>=rqa[2] & HLp<rqa[3]~"Mod High",
+                                HLp>=rqa[3]~"Highest"))
+  
+  xx <- xx %>% 
+    mutate(Quartile = factor(Quartile, c("Lowest","Mod Low",
+                                         "Mod High","Highest")))
+  
+  x[[i]] <- xx
+    
+}
+
+
+  
+x2 <- bind_rows(x) %>% 
+  na.omit()
+
+x2 <- x2 %>% 
+  select(-STATE) %>% 
+  rename(State = STAB) %>% 
+  mutate(HLp = round(HLp,3))
+
+# colors
+mycols <- c('#2ca02c', # cooked asparagus green
+            '#ff7f0e', # safety orange
+            '#1f77b4', # muted blue
+            '#e377c2') # rasberry yogurt pink
+
+```
+
+## Overview
+
+This document contains 3 interactive plots for the HLp data from 2007-2019. Mouse over the data to get more information. We can also add more explanatory text to this document.
+
+
+
+## Smoothed line plots
+
+Figure 1 shows the actual reported prevalence by state (pink lines) and smoothed trend lines (green) to discard small year-to-year variations. States are ordered by slope (regression coefficient) from highest to lowest. Remove either type of line from all states in the figure by clicking on the legend (bottom right). 
+
+
+```{r, fig.cap='Smoothed line plots: HLp by state, 2007-2019'}
+# smoothed plots
+
+x3 <- x2
+
+x3 %<>% mutate(HLp = round(HLp,3))
+
+x <- list()
+
+
+for (i in 1:50) {
+  xtemp <- x3 %>% filter(State==unique(State)[i])
+  
+  x[[i]] <-lm(HLp~Year, data=xtemp)
+}
+
+
+xsort <- tibble(State = unique(x3$State),
+             Slope = NA)
+
+for (i in 1:50) {
+  
+  xsort$Slope[i] <- x[[i]]$coefficients[2]
+}
+
+xsort <- xsort %>% 
+  arrange(desc(Slope)) %>% 
+  mutate(State=factor(State, unique(State)))
+
+
+x3 <- x3 %>% 
+  left_join(xsort) %>% 
+  mutate(Slope = round(Slope,3),
+         State  = factor(State, levels(xsort$State)))
+
+
+
+g <- x3 %>% 
+  ggplot(aes(Year,HLp)) + 
+  geom_smooth(aes(color = "Smoothed"),method=lm, se=F) + 
+  geom_line(aes(color = "Actual")) +
+  geom_text(aes(x = 2013, y = 4,label=State), inherit.aes = F) +
+  facet_wrap(~State, ncol=9) + 
+  theme_minimal() + labs(color="")+
+  theme(panel.grid = element_blank(),
+        legend.position = c(0.9,0.05),
+        panel.spacing.y = unit(2,'lines'),
+        panel.spacing.x = unit(1,'lines'),
+        strip.text.x = element_blank(),
+        axis.title.x = element_blank()) +
+  scale_color_manual(values = c('#e377c2','#2ca02c'))
+
+
+
+ggplotly(g, tooltip = c('Year','HLp'),
+          ) %>% 
+  layout(legend = list(x = 0.75, y = 0.05,
+                       orientation = "h"))
+
+```
+
+<br>
+<br>
+
+## Comparison line plots
+
+Figure 2 shows the reported prevalences by state and for the US overall along with annual mean and median. Click on a line or point to isolate it, or choose one or more lines to compare from the dropdown menu. Double-click in the whitespace to bring all the lines back.
+
+
+```{r, fig.cap='HLp by state and in the aggregate, 2007-2019'}
+
+
+xtemp <- r %>% 
+  filter(STAB %in% c('US','Median','Mean')) %>% 
+  dplyr::select(-STATE) %>% 
+  rename(State = STAB) %>% 
+  mutate(Quartile = '--')
+
+
+# https://rstudio-pubs-static.s3.amazonaws.com/352801_12ebacbc1acb46ff89dd0a08cc1301f3.html
+
+x2 <- x2 %>% 
+  mutate(Quartile = factor(as.character(Quartile),c(levels(Quartile),"--"))) %>% 
+  arrange(State)
+x4 <- x2 %>%  bind_rows(xtemp) %>% 
+  mutate(HLp = round(HLp,3))
+
+xx <- SharedData$new(x4, ~State, group = "Choose state(s)")
+p <- plot_ly(xx, x = ~Year, y = ~HLp, color= ~State,
+             height = 750) %>%
+  group_by(State) %>%
+  add_trace(text = ~State, hoverinfo = 'text', type = 'scatter',
+            mode = 'lines+markers', size = 5, line = list(width=1),
+              hovertext =
+              paste(x4$State,x4$Year,"<br>HLp:",x4$HLp,"<br>Q:",x4$Quartile)) %>% 
+  layout(showlegend = F,
+         xaxis =list(title="")) %>% 
+  plotly::highlight(on = "plotly_click", off = 'plotly_doubleclick',
+  persistent =T, selectize = T) %>% 
+  layout(xaxis = list(showgrid = FALSE),
+          yaxis = list(showgrid = FALSE))
+p
+
+# bscols(widths = c(3, NA), 
+#        filter_checkbox(id = "id-selector", 
+#                      label = "Choose state", 
+#                      sharedData = xx, 
+#                      group = ~State,
+#                      columns = 4), 
+#        p)
+
+
+```
+
+
+<br>
+<br>
+
+## Heatmap
+
+Figure 3 shows a heatmap of state HLp in quartiles by year. Quartiles were calculated by year (could also do overall for all years). States are ordered from highest (top) to lowest (bottom) average HLp (top to bottom). Mouse over any box for more information. 
+
+
+```{r fig.cap='Heatmap: HLp by state (Quartiles), 2007-2019'}
+# heatmap
+
+reverse_legend_labels <- function(plotly_plot) {
+  n_labels <- length(plotly_plot$x$data)
+  plotly_plot$x$data[1:n_labels] <- plotly_plot$x$data[n_labels:1]
+  plotly_plot
+}
+
+
+
+x3 <- x2 
+
+x4 <- x3 %>% 
+  dplyr::group_by(State) %>% 
+  dplyr::summarise(avg = mean(HLp, na.rm=T)) %>% 
+  dplyr::arrange(desc(avg))
+
+x3 <- x3 %>% 
+  mutate(State = factor(State, rev(unique(x4$State))))
+
+#hk <- highlight_key(x2, ~Year)
+
+g <- ggplot(x3, aes(Year,State,fill=Quartile, group=HLp))
+g <- g + geom_tile() + labs(fill="") +
+  theme_minimal() + theme(panel.grid = element_blank()) +
+  scale_x_continuous(breaks=2007:2019,labels=2007:2019) + 
+  scale_fill_manual(values= mycols) + labs(y = "",x = "")
+
+ggplotly(g, tooltip = c("State",'HLp','Year','Quartile')) %>%
+  reverse_legend_labels() %>% 
+  layout(legend=list(orientation = "h", x =0.3, y=100))
+
+```
+
+
