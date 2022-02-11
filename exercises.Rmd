@@ -1,6 +1,0 @@
----
-title: "Exercises"
-output: html_document
----
-
-[Exercise 1: Bivariate regression](STLinequality.html)
