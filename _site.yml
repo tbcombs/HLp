@@ -1,11 +1,11 @@
 name: "HLp"
 output_dir: "."
 navbar:
-  title: 'US and State Hearing Loss Prevalence, 2007-2019'
+  title: ''
   left:
     - text: "Home"
       icon: fa-home
-      href: Seeser_HLpViz.html
+      href: index.html
 
 output: 
   html_document:
