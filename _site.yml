@@ -1,13 +1,10 @@
-name: "RnR"
+name: "HLp"
 output_dir: "."
 navbar:
-  title: 'Combs'
+  title: 'US and State Hearing Loss Prevalence, 2007-2019'
   left:
     - text: "Home"
       icon: fa-home
-      href: index.html
-    - text: "HLp-graphics" 
-      icon: fa-grid
       href: Seeser_HLpViz.html
 
 output: 
