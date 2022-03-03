@@ -268,7 +268,7 @@ ggplotly(gb, tooltip = 'text')
 
 ## Smoothed line plots
 
-Figure 2 shows the actual reported prevalence by state (pink lines) and smoothed trend lines (green) to discard small year-to-year variations. States are ordered by slope (regression coefficient) from highest to lowest. Remove either type of line from all states in the figure by clicking on the legend (bottom right). 
+Figure 2 shows the actual reported prevalence by state (pink lines) and smoothed trend lines (green) to discard small year-to-year variations. States are ordered from top to bottom by their latest HLp values. Remove either type of line from all states in the figure by clicking on the legend (bottom right). 
 
 
 ```{r, fig.cap='Smoothed line plots: HLp by state, 2007-2019'}
