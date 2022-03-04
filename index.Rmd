@@ -199,7 +199,7 @@ mycols <- c('#2ca02c', # cooked asparagus green
 
 ## Introduction
 
-The Centers for Disease Control and Prevention (CDC) maintains an Early Hearing Detection and Intervention (EHDI) Program data base.  (https://www.cdc.gov/ncbddd/hearingloss/ehdi-data.html).  These data are annual state reported results for many metrics involving screening, diagnosis, and early intervention of Deaf and Hard of Hearing (DHOH) newborn babies.  
+The Centers for Disease Control and Prevention (CDC) maintains an [Early Hearing Detection and Intervention (EHDI) Program data base](https://www.cdc.gov/ncbddd/hearingloss/ehdi-data.html). These data are annual state reported results for many metrics involving screening, diagnosis, and early intervention of Deaf and Hard of Hearing (DHOH) newborn babies.  
 
 These data are presented in ways and forms that make it difficult to understand the relative or absolute progress a state or the US is making in any of the dozens of data categories over the two decades since the EHDI program started.  This interactive document presents in several ways Hearing Loss prevalence (HLp)  for the years 2007-2019 allowing any state to compare its absolute and/or relative HLp results over time to any other state or the US as a whole.
 
@@ -207,7 +207,7 @@ HLp was chosen because it is arguably the most meaningful EHDI metric; Early Int
 
 Users may find HLp unfamiliar because, compared to other metrics such as “Loss to Follow-Up” or “Total Screened,” it is not commonly emphasized in EHDI reports and communications.  As a prevalence, it allows easy comparison over time between states and the US regardless of population. The intent is to allow EHDI participants at all levels the ability to gauge progress in this metric.  For many states, it will be a source of pride and satisfaction about the progress of their programs.  For others, it may well be a source of concern.  
 
-My thanks to Todd Combs and Douglas Luke from the Center for Public Health Systems Science at the Brown School at Washington University in St. Louis, who are responsible for the creative presentation of these data.  Comments or suggestions may be sent to tbd.com.
+My thanks to Todd Combs and Douglas Luke from the Center for Public Health Systems Science at the Brown School at Washington University in St. Louis, who are responsible for the creative presentation of these data.  Comments or suggestions may be sent [here](mailto:jseeser@aol.com).
 
 <br>
 
@@ -361,10 +361,10 @@ ggplotly(g, tooltip = c('Year','HLp'),
 
 ## Comparison line plots
 
-Figure 2 shows the reported prevalences by state and for the US overall along with annual mean and median. Click on a line or point to isolate it, or choose one or more lines to compare from the dropdown menu. Double-click in the whitespace to bring all the lines back. To zoom in after selecting states for comparison, drag and drop the mouse from left to right over the plot area. If applicable, the range of the axes will change to fit the selection.
+Figure 3 shows the reported prevalences by state and for the US overall along with annual mean and median. Hover over a point to get state, year, HLp value, and quartile (Lowest, Moderately Low, Moderately High, Highest). Click on a line or point to isolate it, or choose one or more lines to compare from the dropdown menu. Double-click in the whitespace to bring all the lines back. To zoom in after selecting states for comparison, drag and drop the mouse from left to right over the plot area. If applicable, the range of the axes will change to fit the selection.
 
 
-```{r, fig.cap='HLp by state and in the aggregate, 2007-2019'}
+```{r, fig.cap='HLp by state and in the aggregate, 2007-2019',fig.align='center'}
 
 
 xtemp <- r %>% 
@@ -394,7 +394,7 @@ p <- plot_ly(xx, x = ~Year, y = ~HLp, color= ~State,
             line = list(opacity = 1,width = 3.5),
               hovertext =
               paste(x4$State,x4$Year,"<br>HLp:",x4$HLp,"<br>Q:",x4$Quartile)) %>% 
-  layout(showlegend = F,
+  layout(showlegend = F, margin = list(l=0,r=120),
          xaxis =list(title="")) %>% 
   plotly::highlight(on = "plotly_click", off = 'plotly_doubleclick',
   persistent =T, selectize = T,
@@ -420,7 +420,7 @@ p
 
 ## Heatmap
 
-Figure 3 shows a heatmap of state HLp in the quartiles from 2019. States are ordered from highest (top) to lowest (bottom) average HLp (top to bottom). Mouse over any box for more information. 
+Figure 4 shows a heatmap of state HLp in the quartiles from 2019. States are ordered from highest (top) to lowest (bottom) average HLp (top to bottom). Mouse over any box for more information. 
 
 
 ```{r fig.cap='Heatmap: HLp by state (Quartiles), 2007-2019'}
