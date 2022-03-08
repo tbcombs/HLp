@@ -199,38 +199,41 @@ mycols <- c('#2ca02c', # cooked asparagus green
 
 ## Introduction
 
-The Centers for Disease Control and Prevention (CDC) maintains an [Early Hearing Detection and Intervention (EHDI) Program data base](https://www.cdc.gov/ncbddd/hearingloss/ehdi-data.html). These data are annual state reported results for many metrics involving screening, diagnosis, and early intervention of Deaf and Hard of Hearing (DHOH) newborn babies.  
+Since universal Newborn Hearing Screening (NBHS) was mandated two decades ago, the Centers for Disease Control and Prevention (CDC) has collected data from each State’s NBHS program [annual report](https://www.cdc.gov/ncbddd/hearingloss/ehdi-data.html). The annual report includes many metrics involving screening, diagnosis, and early intervention of Deaf and Hard of Hearing (DHOH) newborn babies.  While the amount of data is impressive, the ability to determine relative or absolute progress by state or nationally is not easy.  Hearing Loss prevalence (HLp), arguably one of the most significant of these metrics, was chosen to facilitate comparisons between states.
 
-These data are presented in ways and forms that make it difficult to understand the relative or absolute progress a state or the US is making in any of the dozens of data categories over the two decades since the EHDI program started.  This interactive document presents in several ways Hearing Loss prevalence (HLp)  for the years 2007-2019 allowing any state to compare its absolute and/or relative HLp results over time to any other state or the US as a whole.
+In this presentation, HLp data for the period 2007-2019 are presented in several interactive formats making it easier to learn the relative or absolute progress any state made in this period.  It also illustrates the overall national progress the NBHS program has made since 2007.
 
-HLp was chosen because it is arguably the most meaningful EHDI metric; Early Intervention cannot commence until DHOH babies are found.  It is also the quotient of two highly reliable metrics, the CDC defined “Hearing Loss” and “Total Screened.”  The former is because it is the result of medical diagnoses, and the latter is because most states successfully screen a very high percentage of its newborn babies.  
+HLp was chosen because it is arguably the most meaningful early hearing detection and intervention (EHDI) metric; Early Intervention cannot commence until DHOH babies are found. It is also the quotient of two highly reliable metrics, the CDC defined “Hearing Loss” and “Total Screened,” the former because it is the result of audiological/medical diagnoses, and the latter because most states successfully screen a very high percentage of its newborn babies.
 
-Users may find HLp unfamiliar because, compared to other metrics such as “Loss to Follow-Up” or “Total Screened,” it is not commonly emphasized in EHDI reports and communications.  As a prevalence, it allows easy comparison over time between states and the US regardless of population. The intent is to allow EHDI participants at all levels the ability to gauge progress in this metric.  For many states, it will be a source of pride and satisfaction about the progress of their programs.  For others, it may well be a source of concern.  
+Some may find HLp unfamiliar because, compared to other metrics such as “Loss to Follow-Up” or “Total Screened,” it is not commonly emphasized in EHDI reports and communications. With Hearing Loss being normalized to Total Screened, HLp as a metric allows a population independent comparison over time within a state, between states, and  the United States as a whole.  Clearly visible is the overall increase in HLp the US has made over this period, although there are suggestions of a slowing trend 2018-9.  For many states, these data may be a source of pride and satisfaction about the progress of their programs. For others, it may well be a source of concern. 
 
-My thanks to Todd Combs and Douglas Luke from the Center for Public Health Systems Science at the Brown School at Washington University in St. Louis, who are responsible for the creative presentation of these data.  Comments or suggestions may be sent [here](mailto:jseeser@aol.com).
+Thanks to Todd Combs and Douglas Luke from the [Center for Public Health Systems Science](https://cphss.wustl.edu/) at the Brown School at Washington University in St. Louis, who are responsible for the creative presentation of these data compiled by James W. Seeser.  Comments or suggestions may be sent [here](mailto:EHDIHLP@gmail.com)
+
+Using the icons above the figures, you will discover many ways to view these data.  If you get lost in the data, press the home button <i class="fa fa-home"></i> to return to the original graph.  Have fun!
+
 
 <br>
 
 <br>
 
-## State trends over time
+## States above and below 2019 median HLp value by year, 2007-2019
 
-Figure 1 displays the numbers of states above and below the 2019 median HLp value of 1.8. Over time, more states identified more infants with hearing loss. Mouse over the bars to see the percentage of states reporting above or below the 2019 median each year.
-
-
+Figure 1 displays the numbers of states above and below the 2019 median HLp value of 1.79.  Apparent is the overall positive impact on US HLp of the EHDI program over this period.  Many states significantly improved their individual HLp. Mouse over the bars to see the percentage of states reporting above or below the 2019 median each year. 
 
 
-```{r, fig.cap= "States above and below 2019 median HLp value (1.8) by year, 2007-2019"}
+<br>
 
-x2 <- x2 %>% 
-  mutate(Year = factor(Year, 2019:2007))
+```{r, fig.cap= "States above and below 2019 median HLp value (1.79) by year, 2007-2019"}
+
 
 
  
  xg <- x2 %>% 
-   mutate(cat = factor(ifelse(HLp<1.79,"Below 2019 median HLp (1.8)","Above 2019 median HLp (1.8)"),
-                       c("Above 2019 median HLp (1.8)","Below 2019 median HLp (1.8)"))) %>% 
-   mutate(Year = factor(Year,rev(levels(Year))))
+   mutate(cat = factor(ifelse(HLp<1.79,"Below 2019 median HLp (1.79)","Above 2019 median HLp (1.79)"),
+                       c("Above 2019 median HLp (1.79)","Below 2019 median HLp (1.79)"))) 
+
+# %>% 
+#    mutate(Year = factor(Year,rev(levels(Year))))
  
  xg <- xg %>% 
    group_by(Year,cat) %>% 
@@ -241,25 +244,42 @@ x2 <- x2 %>%
  
  xg <- xg %>% 
    ungroup() %>% 
-   mutate(tot = ifelse(cat=="Below 2019 median HLp (1.8)",tot*-1,tot)) 
+   mutate(tot = ifelse(cat=="Below 2019 median HLp (1.79)",tot*-1,tot)) 
  
 xg <- xg %>% 
   mutate(`States:` = abs(tot))
+
+gb2 <- tibble(x=2007:2019,y=32,label=2007:2019)
+
 
 gb <- xg %>% 
   ggplot(aes(x=Year,y=tot,fill=cat,text = paste0(Year,"\nStates: ",`States:`,
                                                  " (",pc,"%)"))) +
   geom_col() + 
-  geom_hline(yintercept=0,  color = 'white') +
+  geom_hline(yintercept=0,  color = 'white') + 
+  geom_text(aes(label =label,x=x,y=y), data=gb2,
+            inherit.aes = F,size=3.25,fontface='plain') +
   theme_minimal() + theme(panel.grid.major.x  = element_blank()) +
-  scale_y_continuous(limits=c(-40,30),breaks = seq(-35,30,5),
+  scale_y_continuous(limits=c(-40,32),breaks = seq(-35,30,5),
                      labels = c(seq(35,0,-5),seq(5,30,5))) + 
+  scale_x_continuous(breaks= 2007:2019, labels=2007:2019,
+                     sec.axis=dup_axis()) +
   labs(fill="",x="", y="States reporting HLp")
 
+font <- list(
+  size = 15,
+  color = "white"
+)
+
+label <- list(
+  bordercolor = "white",
+  font = font
+)
 
 
-ggplotly(gb, tooltip = 'text')
- 
+ggplotly(gb, tooltip = 'text') %>% 
+  style(hoverlabel = label) %>% 
+  layout(font = font)
 ```
 
 <br>
@@ -268,13 +288,14 @@ ggplotly(gb, tooltip = 'text')
 
 ## Smoothed line plots
 
-Figure 2 shows the actual reported prevalence by state (pink lines) and smoothed trend lines (green) to discard small year-to-year variations. States are ordered from top to bottom by their latest HLp values. Remove either type of line from all states in the figure by clicking on the legend (bottom right). 
+Figure 2 shows the actual reported prevalence by state (pink lines) and smoothed trend lines (green) to discard small year-to-year variations. States are ordered from top to bottom by their latest HLp values. The black dots represent the US median in 2019 for comparison. Remove either type of line from all states in the figure by clicking on the legend (bottom right). 
 
+<br>
 
 ```{r, fig.cap='Smoothed line plots: HLp by state, 2007-2019'}
 # smoothed plots
 
-xus <- r %>% mutate(Year = factor(Year,2019:2007)) %>% 
+xus <- r %>% 
   filter(STAB=='US') %>% 
   select(-STATE) %>% 
   rename(State=STAB)
@@ -284,23 +305,7 @@ x3 <- x2 %>%
 
 x3 %<>% mutate(HLp = round(HLp,3))
 
-x <- list()
 
-
-for (i in 1:50) {
-  xtemp <- x3 %>% filter(State==unique(State)[i])
-  
-  x[[i]] <-lm(HLp~Year, data=xtemp)
-}
-
-
-xsort <- tibble(State = unique(x3$State),
-             Slope = NA)
-
-for (i in 1:50) {
-  
-  xsort$Slope[i] <- x[[i]]$coefficients[2]
-}
 
 x19 <- x3 %>% 
   filter(Year==2019) %>% 
@@ -311,7 +316,9 @@ x19 <- x3 %>%
 # "MS" 18 "CO" 14 "RI" 18 "AL" 18
 
 xmiss <- x2 %>% 
-  filter(State %in% c("MS", "CO", "RI", "AL"))
+  filter(State %in% c("MS", "CO", "RI", "AL")) %>% 
+    mutate(Year = factor(Year,2019:2007)) 
+
 
 xmiss <- x2 %>% 
   filter(State %in% c('MS','RI','AL') & Year==2018 |
@@ -325,16 +332,17 @@ x19 %<>% arrange(desc(HLp))
   
   
 x3 <- x3 %>% 
-  mutate(State  = factor(State, c(unique(x19$State),'US'))) %>% 
-  mutate(Year= as.numeric(as.character(Year)))
+  mutate(State  = factor(State, c(unique(x19$State),'US'))) 
+
 
 
 
 g <- x3 %>% 
-  ggplot(aes(Year,HLp)) + 
+  ggplot(aes(Year,HLp, group=State)) + 
   geom_smooth(aes(color = "Smoothed"),method=lm, se=F) + 
   geom_line(aes(color = "Actual")) +
   geom_text(aes(x = 2013, y = 4,label=State), inherit.aes = F) +
+  geom_point(aes(y=1.79,x=2019)) +
   facet_wrap(~State, ncol=9) + 
   theme_minimal() + labs(color="")+
   theme(panel.grid.major.x = element_blank(),
@@ -343,7 +351,7 @@ g <- x3 %>%
         panel.spacing.x = unit(1,'lines'),
         strip.text.x = element_blank(),
         axis.title.x = element_blank(),
-        strip.text.y = element_text(face='regular'))
+        strip.text.y = element_text(face='plain'))
  # +
  #  scale_color_manual(values = c('#e377c2','#2ca02c'))
 
@@ -354,6 +362,12 @@ ggplotly(g, tooltip = c('Year','HLp'),
   layout(legend = list(x = 0.75, y = 0.05,
                        orientation = "h"))
 
+xfix <- x3 %>% 
+  filter(State!='US') %>% 
+  group_by(Year) %>% 
+  summarise(medH = median(HLp,na.rm = T),
+            mnH = mean(HLp, na.rm = T))
+
 ```
 
 <br>
@@ -361,8 +375,15 @@ ggplotly(g, tooltip = c('Year','HLp'),
 
 ## Comparison line plots
 
-Figure 3 shows the reported prevalences by state and for the US overall along with annual mean and median. Hover over a point to get state, year, HLp value, and quartile (Lowest, Moderately Low, Moderately High, Highest). Click on a line or point to isolate it, or choose one or more lines to compare from the dropdown menu. Double-click in the whitespace to bring all the lines back. To zoom in after selecting states for comparison, drag and drop the mouse from left to right over the plot area. If applicable, the range of the axes will change to fit the selection.
+Figure 3 shows the reported prevalences by state and for the US overall along with annual mean and median. Hover over a point to get state, year, HLp value, and quartile (Highest, Moderately High, Moderately Low, Lowest). Click on a line or point to isolate it, or choose one or more lines to compare from the dropdown menu. Double-click in the whitespace to bring all the lines back. To zoom in after selecting states for comparison, drag and drop the mouse from left to right over the plot area. If applicable, the range of the axes will change to fit the selection. 
 
+Notes:
+
+- It may take a little practice on a touch device to master all the features.
+
+- Line color in figure 3 is only to make visualization easier.
+
+<br>
 
 ```{r, fig.cap='HLp by state and in the aggregate, 2007-2019',fig.align='center'}
 
@@ -371,20 +392,31 @@ xtemp <- r %>%
   filter(STAB %in% c('US','Median','Mean')) %>% 
   dplyr::select(-STATE) %>% 
   rename(State = STAB) %>% 
-  mutate(Quartile = '--') %>% 
-  mutate(Year= factor(Year,2019:2007))
+  mutate(Quartile = '--') 
 
 
 # https://rstudio-pubs-static.s3.amazonaws.com/352801_12ebacbc1acb46ff89dd0a08cc1301f3.html
 
 x2 <- x2 %>% 
-  mutate(Quartile = factor(as.character(Quartile),c(levels(Quartile),"--"))) %>% 
+  
   arrange(State) 
 
 x4 <- x2 %>%  bind_rows(xtemp) %>% 
-  mutate(HLp = round(HLp,3))
+  mutate(HLp = round(HLp,3)) %>% 
+  mutate(Year = factor(Year,2007:2019))
 
-xx <- SharedData$new(x4, ~State, group = "Choose state(s)")
+x5 <- r %>% select(STATE,STAB) %>% 
+  rename(State = STAB)
+x4 <- x4 %>% 
+  left_join(x5)
+
+x4 <- x4 %>% 
+  mutate(HLp = ifelse(State == "Median" & Year==2017,1.83,
+                      ifelse(State == "Mean" & Year==2017,
+                             1.84,HLp)))
+
+xx <- SharedData$new(x4, ~STATE, group = "Choose state(s)")
+
 p <- plot_ly(xx, x = ~Year, y = ~HLp, color= ~State,
              height = 750) %>%
   group_by(State) %>%
@@ -420,42 +452,17 @@ p
 
 ## Heatmap
 
-Figure 4 shows a heatmap of state HLp in the quartiles from 2019. States are ordered from highest (top) to lowest (bottom) average HLp (top to bottom). Mouse over any box for more information. 
+In Figure 4 states are ranked and color coded in 4 fixed HLp ranges.  These ranges are determined by 2019 quartiles.  In this way, it is possible to see how the distribution of states (in the fixed intervals defined in the key) has changed over time. States are ordered from highest (top) to lowest (bottom) average HLp (top to bottom). Mouse over any box for more information. Click on a state or states to isolate all years for the selection.
+
+Note: 
+
+- The figure shows how states having HLp > 1.79 steadily increase in number 2007-2017, while showing a curious reversal of this trend 2018-9. 
+
+<br>
 
 
 ```{r fig.cap='Heatmap: HLp by state (Quartiles), 2007-2019'}
 # heatmap
-
-# reverse_legend_labels <- function(plotly_plot) {
-#   n_labels <- length(plotly_plot$x$data)
-#   plotly_plot$x$data[1:n_labels] <- plotly_plot$x$data[n_labels:1]
-#   plotly_plot
-# }
-# 
-# 
-# 
-# x3 <- x2 
-# 
-# x4 <- x3 %>% 
-#   dplyr::group_by(State) %>% 
-#   dplyr::summarise(avg = mean(HLp, na.rm=T)) %>% 
-#   dplyr::arrange(desc(avg))
-# 
-# x3 <- x3 %>% 
-#   mutate(State = factor(State, rev(unique(x4$State))))
-# 
-# #hk <- highlight_key(x2, ~Year)
-# 
-# g <- ggplot(x3, aes(Year,State,fill=Quartile, group=HLp))
-# g <- g + geom_tile() + labs(fill="") +
-#   theme_minimal() + theme(panel.grid = element_blank()) +
-#   scale_x_continuous(breaks=2007:2019,labels=2007:2019) + 
-#   scale_fill_manual(values= mycols) + labs(y = "",x = "")
-# 
-# ggplotly(g, tooltip = c("State",'HLp','Year','Quartile')) %>%
-#   reverse_legend_labels() %>% 
-#   layout(legend=list(orientation = "h", x =0.3, y=100))
-
 
 r19 <- r2 %>% 
   filter(Year==2019) %$%
@@ -471,18 +478,7 @@ r2 <- r2 %>%
 r2 <- r2 %>% 
   mutate(cat = factor(cat)) %>% 
   na.omit()
-# xx <- SharedData$new(r2, ~State, group = "Choose state(s)")
-# 
-# g <- r2 %>% 
-#   ggplot(aes(x=Year,y=Rank,label=STAB,group=STAB,fill=cat)) + 
-#   geom_tile() +
-#   geom_text(size=4, fontface='bold') +
-#   theme_minimal() + theme(panel.grid = element_blank(),
-#                           axis.text.y = element_blank()) +
-#   scale_y_reverse()
-# 
-# g
-# 
+
 # ggplotly(g,source = 'xx')
 
 r3 <- r2 %>% 
@@ -506,34 +502,47 @@ r3 <- r3 %>%
   mutate(Rank = unlist(x))
 
 r3 <- r3 %>% 
-  mutate(cat2 = case_when(cat=='1st'~"HLp: 0.21 - 1.33",
-                          cat=='2nd'~"HLp: 1.33 - 1.79",
-                          cat=='3rd'~"HLp: 1.79 - 2.12",
-                          cat=='4th'~"HLp: 2.12 - 4.54",
+  mutate(cat2 = case_when(cat=='1st'~"Lowest - HLp: 0.21 - 1.33",
+                          cat=='2nd'~"Moderately low - HLp: 1.33 - 1.79",
+                          cat=='3rd'~"Moderately high - HLp: 1.79 - 2.12",
+                          cat=='4th'~"Highest - HLp: 2.12 - 4.54",
                           is.na(cat)~"US")) 
 x <- sort(unique(r3$cat2))
 
-r3 %<>% mutate(cat2 = factor(cat2, rev(x)))
+r3 %<>% mutate(cat2 = factor(cat2, x[c(5,1,3,4,2)]))
 
-
+r3 <- r3 %>% 
+  mutate(HLp = round(HLp,3))
 
 r3%<>% select(-STATE) %>% 
   rename(State = STAB)
 
-g <- r3 %>% 
-  ggplot(aes(x=Year,y=Rank,label=State,group=State,fill=cat2,
-             color = HLp,)) + 
+gb2 <- tibble(x=2007:2019,y=53,label=2007:2019)
+
+
+
+xx <- SharedData$new(r3, ~State)
+
+
+
+g <- xx %>% 
+  ggplot(aes(x=Year,y=Rank,
+             label=State,group=State,fill=cat2,
+             text = paste0("HLp: ",HLp))) + 
   geom_tile(color='white') +
-  geom_text(size=4, fontface='bold') +
+  geom_text(size=4, fontface='bold',color='black') +
+    geom_text(aes(label =label,x=x,y=y), data=gb2,
+            inherit.aes = F,size=3.25,fontface='plain') +
   theme_minimal() + theme(panel.grid = element_blank(),
                           axis.text.y = element_blank()) +
   scale_x_continuous(breaks = 2007:2019) + 
-  labs(fill="",x="",y="") +
-  guides(color='none',shape='none')
+  labs(fill="",x="",y="") 
 
 
 
-ggplotly(g,tooltip = c("label", "Year","HLp") )
+ggplotly(g,tooltip = c("label","x", "text" )) %>% 
+  highlight(on = "plotly_click", off = "plotly_doubleclick",
+             persistent=T)
 
 ```
 
