@@ -96,6 +96,10 @@ library(plotly) # for interactive plots
 library(readxl) # open xlsx
 library(crosstalk)
 library(catmaply)
+library(knitr)
+library(kableExtra)
+options(knitr.kable.NA = '')
+
 
 #get file names
 x <- list.files()
@@ -381,7 +385,9 @@ Notes:
 
 - It may take a little practice on a touch device to master all the features.
 
-- Line color in figure 3 is only to make visualization easier.
+- Line color in Figure 3 is only to make visualization easier.
+
+
 
 <br>
 
@@ -444,6 +450,64 @@ p
 #        p)
 
 
+```
+
+<br>
+<br>
+
+## Boxplots
+
+
+Figure 4 shows the distributions of states' HLp values in boxplots by year. The area
+in the box begins with the first quartile (25th percentile). The middle line represents
+the median data point, and the top of the box is the third quartile (75th percentile).
+The <i>whiskers</i> (lines beyond the box) show the minimum value on the bottom,or the
+<i>lower fence</i> when outliers are present. The <i>upper fence</i> is at the top of the line. The fence values represent where the minimum and maximum values would be if the
+distribution were normal. Dots above and below the whiskers represent outliers. Mouse
+over the boxes and whiskers to view all these statistics.
+
+The overall trend for the median and maximum values for states' HLp is increasing most years, though small decreases in some years. This year-to-year oscillation is likely
+statistical noise.
+
+
+
+```{r fig.cap='State HLp distribution by year, 2007-2019',fig.align='center'}
+
+bp <- x2 %>% 
+  ggplot(aes(y=HLp,group=Year, x=factor(Year), 
+             color=factor(Year))) +
+  geom_boxplot() +
+  theme_minimal() + labs(color="")+
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "none",
+        panel.spacing.y = unit(2,'lines'),
+        panel.spacing.x = unit(1,'lines'),
+        strip.text.x = element_blank(),
+        axis.title.x = element_blank(),
+        strip.text.y = element_text(face='plain'))
+
+
+
+ggplotly(bp, tooltip = c("y"))
+
+```
+
+
+
+Table 1 shows the numbers by year.
+
+<br>
+<br>
+
+```{r, results='asis'}
+xw <- x2 %>% 
+  select(1:3) %>% 
+  pivot_wider(names_from=Year,
+              values_from=`HLp`)
+
+kable(xw, format='html',digits=3,
+      caption = "States' HLp values by year, 2007-2019") %>% 
+  kable_styling(full_width = T)
 ```
 
 
